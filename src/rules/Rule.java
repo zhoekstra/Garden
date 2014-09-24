@@ -12,24 +12,21 @@ public abstract class Rule {
      * 
      * @param gs
      */
-    public void applyRestrictiveRules(GardenSolver gs) {
+    public void applyRestrictions(GardenSolver gs) {
     }
 
     /**
      * Optional method The recursive portion of the solver. Each rule should
-     * attempt to find a valid solution for itself, then recursively call this
-     * function on the next Rule in the list. This creates a pile of boilerplate
-     * recursive code, but I'm not sure there's a good way to do this and make
-     * the rules generic.
+     * iterate through all valid covers of itself, choosing the nodes,
+     * then call myruleset.recurse(). If recurse() returns true, return true yourself.
+     * If recurse returns false, iterate over your next cover.
+     * 
+     * If you cannot find the appropriate solution with the state you were passed, return false;
      * 
      * @param gs
      * @param rules
      */
-    public void applyPositiveRules(GardenSolver gs, LinkedList<Rule> rules) {
-        Rule toapply = rules.removeFirst();
-        toapply.applyPositiveRules(gs, rules);
-        rules.addFirst(toapply);
-    }
+    public boolean coverRule(GardenSolver gs, Ruleset myruleset) {return true;}
 
     /**
      * Non-Optional method

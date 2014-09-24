@@ -1,16 +1,42 @@
 package garden;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import common.Position;
 
 public class GardenSolver implements Iterable<Choice> {
+    public static void main(String[] args){
+        int size = 5;
+        GardenSolver gs = new GardenSolver(size,0.15);
+        for(int x = 0; x < size; ++x){
+            for(int y = 0; y < size; ++y){
+                Choice empty = gs.getChoice(x, y, Attribute.Empty);
+                int[] arr  = new int[] {-1,0,1};
+                for(int xmod : arr){
+                    for(int ymod : arr){
+                        if(xmod == 0 && ymod == 0) continue;
+                        Choice adjempty = gs.getChoice(x+xmod,  y + ymod, Attribute.Empty);
+                        if(adjempty != null) Choice.linkExclusiveChoices(adjempty, empty);
+                    }
+                }
+                    
+            }
+        }
+        
+        List<Choice> solution = gs.basicSolve();
+        Collections.sort(solution);
+        for(Choice c : solution){
+            System.out.println(c.toString());
+        }
+    }
     /**
      * the root of our circular linked list. This is the only Choice that is
      * allowed to have Root as it's attribute, and is never returned for
@@ -89,13 +115,10 @@ public class GardenSolver implements Iterable<Choice> {
                 choices[8] = new Choice(Attribute.Water, pos);
                 // If we choose water, the piece cannot have any Sizes, Colors,
                 // or Types.
-                for (int i = 0; i < choices.length - 1; ++i)
-                    Choice.linkExclusiveChoices(choices[8], choices[i]); // link
-                                                                         // water
-                                                                         // to
-                                                                         // all
-                                                                         // other
-                                                                         // choices
+                for (int i = 0; i < choices.length - 1; ++i) {
+                    // link water to all other choices
+                    Choice.linkExclusiveChoices(choices[8], choices[i]);
+                }
 
                 // Whether there is no piece at all.
                 Choice empty = new Choice(Attribute.Empty, pos);
@@ -109,10 +132,10 @@ public class GardenSolver implements Iterable<Choice> {
                 // things up by position and attribute at any point.
                 // We also need all our nodes to be in the HashTable for
                 // shuffle() to work
-                EnumMap<Attribute, Choice> thispos = new EnumMap<Attribute, Choice>(
-                        Attribute.class);
+                EnumMap<Attribute, Choice> thispos = new EnumMap<Attribute, Choice>(Attribute.class);
                 for (Choice c : choices)
                     thispos.put(c.getAttribute(), c);
+                thispos.put(empty.getAttribute(), empty);
                 _choiceTable.put(pos, thispos);
             }
         }
@@ -126,7 +149,14 @@ public class GardenSolver implements Iterable<Choice> {
         for (Choice c = _root.getRight(); c != _root; c = c.getRight())
             c.lockBasicExclusiveChoices();
     }
-
+    public List<Choice> basicSolve(){
+        LinkedList<Choice> solution = new LinkedList<Choice>();
+        while(_root.getRight() != _root){
+            solution.add(_root.getRight());
+            _root.getRight().choose();
+        }
+        return solution;
+    }
     public void reset(double empty_prevalence_perc) {
         // remove any additional choice exclusions rules may have applied
         for (Map<Attribute, Choice> posmap : _choiceTable.values()) {
@@ -143,6 +173,7 @@ public class GardenSolver implements Iterable<Choice> {
     }
 
     public Choice getChoice(Position pos, Attribute a) {
+        if(!_choiceTable.containsKey(pos)) return null;
         return _choiceTable.get(pos).get(a);
     }
 
@@ -184,8 +215,7 @@ public class GardenSolver implements Iterable<Choice> {
         // (total_number_of_choices * %of_list_emptys_will_be_shuffled_into) -
         // number_of_emptys = the number of non-empty choices we need to
         // randomly grab.
-        int num_choices_to_grab = (int) ((temp_emptys.size() + temp_choices
-                .size()) * empty_prevalence_perc) - temp_emptys.size();
+        int num_choices_to_grab = (int) ((temp_emptys.size() + temp_choices.size()) * empty_prevalence_perc) - temp_emptys.size();
         // grab 'em, merge them with the emptys, and shuffle the whole thing.
         for (int i = 0; i < num_choices_to_grab; ++i)
             firstNitems.add(temp_choices.removeFirst());
@@ -209,22 +239,16 @@ public class GardenSolver implements Iterable<Choice> {
 
         // if either the Empty or Water choices are still available (either Open
         // or Chosen), this spot if still valid.
-        if (!(pos.get(Attribute.Empty).isClosed() || pos.get(Attribute.Water)
-                .isClosed()))
+        if (!(pos.get(Attribute.Empty).isClosed() || pos.get(Attribute.Water).isClosed()))
             return true;
 
         // If both are closed, then we need to choose one Type, one Color, and
         // one Size.
         // If all of a certain category is closed, we don't have a valid Space
         // and whatever current Choice set we currently have is invalid.
-        boolean typevalid = !(pos.get(Attribute.Stone).isClosed()
-                && pos.get(Attribute.Statue).isClosed() && pos.get(
-                Attribute.Plant).isClosed());
-        boolean colorvalid = !(pos.get(Attribute.Black).isClosed()
-                && pos.get(Attribute.Gray).isClosed() && pos.get(
-                Attribute.White).isClosed());
-        boolean sizevalid = !(pos.get(Attribute.Small).isClosed() && pos.get(
-                Attribute.Large).isClosed());
+        boolean typevalid = !(pos.get(Attribute.Stone).isClosed() && pos.get(Attribute.Statue).isClosed() && pos.get(Attribute.Plant).isClosed());
+        boolean colorvalid = !(pos.get(Attribute.Black).isClosed() && pos.get(Attribute.Gray).isClosed() && pos.get(Attribute.White).isClosed());
+        boolean sizevalid = !(pos.get(Attribute.Small).isClosed() && pos.get(Attribute.Large).isClosed());
 
         if (typevalid && colorvalid && sizevalid)
             return true;

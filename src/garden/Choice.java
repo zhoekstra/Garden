@@ -6,7 +6,7 @@ import java.util.List;
 
 import common.Position;
 
-public class Choice {
+public class Choice implements Comparable<Choice> {
     private final Attribute _attribute;
     private final Position _position;
 
@@ -123,6 +123,8 @@ public class Choice {
      */
     public boolean addExclusiveChoice(Choice c) {
         if (_exclusiveChoices.contains(c))
+            return false;
+        else if(c == this)
             return false;
         _exclusiveChoices.add(c);
         return true;
@@ -289,5 +291,20 @@ public class Choice {
 
     public boolean isOpen() {
         return _status == Status.Open;
+    }
+    @Override
+    public String toString(){
+        return String.format("[%s at %s]", _attribute.toString(), _position.toString());
+    }
+
+    @Override
+    public int compareTo(Choice o) {
+        if(_attribute == Attribute.Empty && o.getAttribute() != Attribute.Empty) return -1;
+        if(_attribute != Attribute.Empty && o.getAttribute() == Attribute.Empty) return 1;
+        
+        int poscompare = _position.compareTo(o.getPosition());
+        if (poscompare != 0) return poscompare;
+        
+        else return _attribute.compareTo(o.getAttribute());
     }
 }
