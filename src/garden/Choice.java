@@ -15,7 +15,7 @@ public class Choice {
 	private Choice _left = this;
 	private Choice _right = this;
 	
-	// A list of other choices that are mutually exclusive with this one. If this choice is chosen, these choices 
+	// A list of other choices that are mutually exclusive with this one. If this choice is chosen, these choices will automatically be closed.
 	private final List<Choice> _exclusiveChoices = new ArrayList<Choice>(0);
 	// A list of the 'basic' exclusions necessitated by the rules of the game (Pieces can't be two colors, an Empty square has no piece info, etc, etc.)
 	// Can be used to reset the Choice to a basic state, effectively removing all additional rules placed on the board.
@@ -50,6 +50,10 @@ public class Choice {
 		this.setLeft(c);
 		c._status = Status.Open;
 	}
+	/**
+	 * Close this Choice, rendering it incapable of being chosen for the final solution
+	 * @return
+	 */
 	public boolean close(){
 		if(_status != Status.Open) return false;
 		
@@ -57,6 +61,10 @@ public class Choice {
 		_status = Status.Closed;
 		return true;
 	}
+	/**
+	 * Choose this Choice, claiming it as part of the final solution and closing all exclusive choices
+	 * @return
+	 */
 	public boolean choose(){
 		if(_status != Status.Open) return false;
 		// The order of these two lines is important. I must re-link in the reverse order that I unlink.
@@ -66,6 +74,10 @@ public class Choice {
 		_status = Status.Chosen;
 		return true;
 	}
+	/**
+	 * Re-open this Choice after it has previously been closed or chosen.
+	 * @return
+	 */
 	public boolean open(){
 		if(_status == Status.Open) return false;
 		// The order of these two lines is important. I must re-link in the reverse order that I unlink.
@@ -75,29 +87,53 @@ public class Choice {
 		_status = Status.Open;
 		return true;	
 	}
+	/**
+	 * Add a one-way exclusive link between this Choice and another choice. Choice c will be closed if this choice is chosen 
+	 * @param c
+	 * @return
+	 */
 	public boolean addExclusiveChoice(Choice c){
 		if(_exclusiveChoices.contains(c)) return false;
 		_exclusiveChoices.add(c);
 		return true;
 	}
+	/**
+	 * Declare the current set of exclusive choices to be the basic rules for this Board.
+	 * From here on out, any call to resetToBasicExclusiveChoices() will reset to the exclusive set defined at this point in time.
+	 * @return
+	 */
 	public boolean lockBasicExclusiveChoices(){
 		if(_basicExclusiveChoices != null) return false;
 		_basicExclusiveChoices = new ArrayList<Choice>(_exclusiveChoices);
 		return true;
 	}
+	/**
+	 * reset to the exclusive choices locked in by lockBasicExclusiveChoices()
+	 * @return
+	 */
 	public boolean resetToBasicExclusiveChoices(){
 		if(_basicExclusiveChoices == null) return false;
 		_exclusiveChoices.retainAll(_basicExclusiveChoices);
 		return true;
 	}
 	/**
-	 * 
+	 * Exclusively link two Choices together, so that they are mutually exclusive to each other. 
 	 * @param a
 	 * @param b
 	 */
 	public static void linkExclusiveChoices(Choice a, Choice b){
 		a.addExclusiveChoice(b);
 		b.addExclusiveChoice(a);
+	}
+	/**
+	 * Exclusively link multiple Choices together, so that they are mutually exclusive to each other. 
+	 * @param choices
+	 */
+	public static void linkExclusiveChoices(Choice... choices){
+		for(int firstiter = 0; firstiter < choices.length-1; ++firstiter)
+			for(int seconditer = firstiter+1; seconditer < choices.length; ++seconditer){
+				linkExclusiveChoices(choices[firstiter], choices[seconditer]);
+			}
 	}
 	/**
 	 * unlink this Choice, so that the Choices to the left and right of it point to each other.

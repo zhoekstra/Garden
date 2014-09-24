@@ -1,17 +1,13 @@
 package garden;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import common.Position;
-import rules.Rule;
 
 
 public class GardenSolver implements Iterable<Choice> {
@@ -23,12 +19,16 @@ public class GardenSolver implements Iterable<Choice> {
 	 * A map of all of our choices. We can use this to reset the list at any time, and Rules can use this to point directly to the choices they need to modify
 	 */
 	private final HashMap<Position, EnumMap<Attribute, Choice>> _choiceTable = new HashMap<Position, EnumMap<Attribute, Choice>>();
+	/**
+	 * The size of this Garden
+	 */
+	private final int size;
 	
 	/**
 	 * Create a default 4x4 garden with approximately 2/3 of the free spaces after generation being empty.
 	 */
 	public GardenSolver(){
-		this(4,4,.15);
+		this(4, 0.15);
 	}
 	/**
 	 * 
@@ -36,10 +36,11 @@ public class GardenSolver implements Iterable<Choice> {
 	 * @param width
 	 * @param empty_prevalence_perc
 	 */
-	public GardenSolver(int height, int width, double empty_prevalence_perc){
-
-		for(int y = 0; y < height; ++y){
-			for(int x = 0; x < width; ++x){
+	public GardenSolver(int size, double empty_prevalence_perc){
+		if(size < 1) size = 1;
+		this.size = size;
+		for(int y = 0; y < size; ++y){
+			for(int x = 0; x < size; ++x){
 				Position pos = new Position(x,y);
 				// we use this temp array so we can easily link things together later
 				Choice[] choices = new Choice[9];
@@ -55,18 +56,14 @@ public class GardenSolver implements Iterable<Choice> {
 				choices[1] = new Choice(Attribute.Plant, pos);
 				choices[2] = new Choice(Attribute.Statue, pos);
 				// by choosing one type, we cannot choose any other type at the same position.
-				Choice.linkExclusiveChoices(choices[0], choices[1]);
-				Choice.linkExclusiveChoices(choices[0], choices[2]);
-				Choice.linkExclusiveChoices(choices[1], choices[2]);
+				Choice.linkExclusiveChoices(choices[0], choices[1], choices[2]);
 				
 				// The color of the piece.
 				choices[3] = new Choice(Attribute.Black, pos);
 				choices[4] = new Choice(Attribute.Gray, pos);
 				choices[5] = new Choice(Attribute.White, pos);
 				// by choosing one color, we cannot choose any other color at the same position
-				Choice.linkExclusiveChoices(choices[3], choices[4]);
-				Choice.linkExclusiveChoices(choices[3], choices[5]);
-				Choice.linkExclusiveChoices(choices[4], choices[5]);
+				Choice.linkExclusiveChoices(choices[3], choices[4], choices[5]);
 				
 				// The size of the piece
 				choices[6] = new Choice(Attribute.Small, pos);
@@ -158,7 +155,10 @@ public class GardenSolver implements Iterable<Choice> {
 		for(Choice c : temp_choices) _root.addChoice(c);
 	}
 	
-	private boolean isValid(Position p){
+	public boolean isValid(int x, int y){
+		return isValid(new Position(x,y));
+	}
+	public boolean isValid(Position p){
 		EnumMap<Attribute, Choice> pos = _choiceTable.get(p);
 		
 		// if either the Empty or Water choices are still available (either Open or Chosen), this spot if still valid.
@@ -192,6 +192,12 @@ public class GardenSolver implements Iterable<Choice> {
 			current = current.getRight();
 			return toreturn;
 		}
-		
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public int getSize(){
+		return size;
 	}
 }
