@@ -7,8 +7,7 @@ import java.util.List;
 import common.Position;
 
 public class Choice implements Comparable<Choice> {
-    private final Attribute _attribute;
-    private final Position _position;
+    private final PieceProperty _property;
 
     private Status _status = Status.Open;
     private Choice _left = this;
@@ -38,8 +37,7 @@ public class Choice implements Comparable<Choice> {
      * @param position
      */
     public Choice(Attribute attribute, Position position) {
-        this._attribute = attribute;
-        this._position = position;
+        _property = new PieceProperty(position, attribute);
     }
 
     /**
@@ -264,14 +262,14 @@ public class Choice implements Comparable<Choice> {
      * @return the attribute
      */
     public Attribute getAttribute() {
-        return _attribute;
+        return _property.getAttribute();
     }
 
     /**
      * @return the position
      */
     public Position getPosition() {
-        return _position;
+        return _property.getPosition();
     }
 
     /**
@@ -294,17 +292,21 @@ public class Choice implements Comparable<Choice> {
     }
     @Override
     public String toString(){
-        return String.format("[%s at %s]", _attribute.toString(), _position.toString());
+        return String.format("[%s at %s]", getAttribute().toString(), getPosition().toString());
+    }
+
+    public PieceProperty getProperty() {
+        return _property;
     }
 
     @Override
     public int compareTo(Choice o) {
-        if(_attribute == Attribute.Empty && o.getAttribute() != Attribute.Empty) return -1;
-        if(_attribute != Attribute.Empty && o.getAttribute() == Attribute.Empty) return 1;
+        if(getAttribute() == Attribute.Empty && o.getAttribute() != Attribute.Empty) return -1;
+        if(getAttribute() != Attribute.Empty && o.getAttribute() == Attribute.Empty) return 1;
         
-        int poscompare = _position.compareTo(o.getPosition());
+        int poscompare = getPosition().compareTo(o.getPosition());
         if (poscompare != 0) return poscompare;
         
-        else return _attribute.compareTo(o.getAttribute());
+        else return getAttribute().compareTo(o.getAttribute());
     }
 }
