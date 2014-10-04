@@ -1,5 +1,6 @@
-package rules;
+package rules.core;
 
+import rules.common.Rule;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;

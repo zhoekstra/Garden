@@ -1,6 +1,4 @@
-package rules;
-
-import java.util.LinkedList;
+package rules.common;
 
 import garden.GardenSolver;
 
@@ -12,13 +10,12 @@ public abstract class Rule {
      * 
      * @param gs
      */
-    public void applyRestrictions(GardenSolver gs) {
-    }
+    public void applyRestrictions(GardenSolver gs) {}
 
     /**
      * Optional method The recursive portion of the solver. Each rule should
      * iterate through all valid covers of itself, choosing the nodes,
-     * then call myruleset.recurse(). If recurse() returns true, return true yourself.
+     * then call myruleset.recurse(). If recurse() returns true, a valid solution has been found for the rules underneath you.
      * If recurse returns false, iterate over your next cover.
      * 
      * If you cannot find the appropriate solution with the state you were passed, return false;
@@ -26,7 +23,7 @@ public abstract class Rule {
      * @param gs
      * @param rules
      */
-    public boolean coverRule(GardenSolver gs, Ruleset myruleset) {return true;}
+    public boolean coverRule(GardenSolver gs, Ruleset myruleset) {return myruleset.recurse(gs);}
 
     /**
      * Non-Optional method

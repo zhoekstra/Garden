@@ -1,4 +1,4 @@
-package rules;
+package rules.common;
 
 import garden.Choice;
 import garden.GardenSolver;
@@ -29,6 +29,8 @@ public class Ruleset {
     }
 
     public boolean recurse(GardenSolver gs) {
+        if(rules.size() == 0) return true;
+        
         Rule current = rules.removeFirst();
         boolean succeeded = current.coverRule(gs, this);
         rules.addFirst(current);

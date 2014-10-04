@@ -1,4 +1,4 @@
-package common;
+package garden.common;
 
 public class Position implements Comparable<Position> {
     private final int x;

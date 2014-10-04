@@ -1,10 +1,10 @@
 package garden;
 
+import garden.common.Position;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import common.Position;
 
 public class Choice implements Comparable<Choice> {
     private final PieceProperty _property;

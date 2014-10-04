@@ -1,4 +1,4 @@
-package common;
+package garden.common;
 
 public class Pair<K extends Comparable<K>, V extends Comparable<V>> implements
         Comparable<Pair<K, V>> {
