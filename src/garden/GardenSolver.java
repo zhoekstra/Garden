@@ -1,8 +1,6 @@
 package garden;
 
 import garden.common.Position;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
