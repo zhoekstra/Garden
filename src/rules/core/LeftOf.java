@@ -104,8 +104,7 @@ public class LeftOf extends Rule {
 
     @Override
     public Rule negative() {
-        // TODO Auto-generated method stub
-        return null;
+        return new NotLeftOf(left,right);
     }
 
 }

@@ -29,8 +29,7 @@ public class NotAdjacent extends Rule {
 
     @Override
     public Rule negative() {
-        return null;
-        //TODO return new Adjacent(first, second);
+        return new Adjacent(first, second);
     }
 
     public NotAdjacent(Attribute first, Attribute second) {
