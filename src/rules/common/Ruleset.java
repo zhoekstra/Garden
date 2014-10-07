@@ -7,6 +7,7 @@ import garden.Status;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -30,16 +31,12 @@ public class Ruleset {
         this.rules.add(new BoardIsUnique(existingBoards));
     }
 
-    public List<PieceProperty> solveRuleset(GardenSolver gs){
+    public Set<PieceProperty> solveRuleset(GardenSolver gs){
         for(Rule rule : rules){
             rule.applyRestrictions(gs);
         }
-        List<PieceProperty> toreturn = new LinkedList<PieceProperty>();
-        if(!recurse(gs)) return toreturn;
-        for(Choice c : gs){
-            if(c.getStatus() == Status.Chosen) toreturn.add(c.getProperty());
-        }
-        return toreturn;
+        if(!recurse(gs)) return new HashSet<PieceProperty>();
+        else return gs.getAllChosenProperties();
     }
 
     public boolean recurse(GardenSolver gs) {

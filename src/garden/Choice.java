@@ -290,6 +290,10 @@ public class Choice implements Comparable<Choice> {
     public boolean isOpen() {
         return _status == Status.Open;
     }
+    public boolean isClosedOrChosen(){
+        return _status == Status.Closed || _status == Status.Chosen;
+    }
+    
     @Override
     public String toString(){
         return String.format("[%s at %s]", getAttribute().toString(), getPosition().toString());

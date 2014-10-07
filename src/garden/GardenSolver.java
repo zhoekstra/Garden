@@ -14,30 +14,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class GardenSolver implements Iterable<Choice>{
-    public static void main(String[] args){
-        int size = 5;
-        GardenSolver gs = new GardenSolver(size,0.15);
-        for(int x = 0; x < size; ++x){
-            for(int y = 0; y < size; ++y){
-                Choice empty = gs.getChoice(x, y, Attribute.Empty);
-                int[] arr  = new int[] {-1,0,1};
-                for(int xmod : arr){
-                    for(int ymod : arr){
-                        if(xmod == 0 && ymod == 0) continue;
-                        Choice adjempty = gs.getChoice(x+xmod,  y + ymod, Attribute.Empty);
-                        if(adjempty != null) Choice.linkExclusiveChoices(adjempty, empty);
-                    }
-                }
-                    
-            }
-        }
-        
-        List<Choice> solution = gs.basicSolve();
-        Collections.sort(solution);
-        for(Choice c : solution){
-            System.out.println(c.toString());
-        }
-    }
     /**
      * the root of our circular linked list. This is the only Choice that is
      * allowed to have Root as it's attribute, and is never returned for
@@ -193,6 +169,15 @@ public class GardenSolver implements Iterable<Choice>{
     public Set<Position> getPositions(){
         return _choiceTable.keySet();
     }
+    public Set<PieceProperty> getAllChosenProperties(){
+        Set<PieceProperty> toreturn = new HashSet<PieceProperty>();
+        for(EnumMap<Attribute, Choice> map : _choiceTable.values()){
+            for(Choice c : map.values()){
+                if(c.isChosen()) toreturn.add(new PieceProperty(c.getPosition(), c.getAttribute()));
+            }
+        }
+        return toreturn;
+    }
 
     private void shuffle(double empty_prevalence_perc) {
         // as 10% of our values will always be Empty's, empty_prevalence_perc
@@ -247,11 +232,11 @@ public class GardenSolver implements Iterable<Choice>{
             _root.addChoice(c);
     }
 
-    public boolean isValid(int x, int y) {
-        return isValid(new Position(x, y));
+    public boolean CanStillBeValid(int x, int y) {
+        return CanStillBeValid(new Position(x, y));
     }
 
-    public boolean isValid(Position p) {
+    public boolean CanStillBeValid(Position p) {
         EnumMap<Attribute, Choice> pos = _choiceTable.get(p);
 
         // if either the Empty or Water choices are still available (either Open
@@ -271,6 +256,24 @@ public class GardenSolver implements Iterable<Choice>{
             return true;
         else
             return false;
+    }
+    public boolean isCurrentlyValid(int x, int y) {
+        return CanStillBeValid(new Position(x, y));
+    }
+    public boolean isCurrentlyValid(Position p){
+        EnumMap<Attribute, Choice> pos = _choiceTable.get(p);
+        
+        if(pos.get(Attribute.Empty).isChosen() || pos.get(Attribute.Water).isChosen())
+            return true;
+        
+        boolean typevalid = (pos.get(Attribute.Stone).isChosen() || pos.get(Attribute.Statue).isChosen() || pos.get(Attribute.Plant).isChosen());
+        boolean colorvalid = (pos.get(Attribute.Black).isChosen() || pos.get(Attribute.Gray).isChosen() || pos.get(Attribute.White).isChosen());
+        boolean sizevalid = (pos.get(Attribute.Small).isChosen() || pos.get(Attribute.Large).isChosen());
+        
+        if(typevalid && colorvalid && sizevalid)
+            return true;
+        
+        else return false;
     }
 
     @Override

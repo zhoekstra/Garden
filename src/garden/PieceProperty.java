@@ -21,4 +21,9 @@ public class PieceProperty implements Comparable<PieceProperty> {
         int comppos = position.compareTo(o.getPosition());
         return comppos == 0 ? attribute.compareTo(o.attribute) : comppos;
     }
+    
+    @Override
+    public String toString(){
+        return String.format("[%s at %s]", getAttribute().toString(), getPosition().toString());
+    }
 }
