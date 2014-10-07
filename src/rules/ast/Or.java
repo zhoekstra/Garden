@@ -1,10 +1,22 @@
 package rules.ast;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import rules.common.Rule;
 
 public class Or extends Rule {
     private final Rule left;
     private final Rule right;
+    
+    public List<List<Rule>> walk() {
+        List<List<Rule>> toreturn =new LinkedList<List<Rule>>();
+        
+        toreturn.addAll(left.walk());
+        toreturn.addAll(right.walk());
+        
+        return toreturn;
+    }
 
     public Rule getLeft() {
         return left;

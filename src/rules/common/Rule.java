@@ -1,6 +1,12 @@
 package rules.common;
 
 import garden.GardenSolver;
+import garden.PieceProperty;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public abstract class Rule {
     /**
@@ -24,6 +30,30 @@ public abstract class Rule {
      * @param rules
      */
     public boolean coverRule(GardenSolver gs, Ruleset myruleset) {return myruleset.recurse(gs);}
+    
+    /**
+     * 
+     * @param generatedBoards
+     * @return
+     */
+    public final List<Ruleset> walkRulesets(List<Set<PieceProperty>> generatedBoards){
+        List<Ruleset> toreturn = new LinkedList<Ruleset>();
+        List<List<Rule>> result = this.walk();
+        Rule[] toarrayidentifier = new Rule[0];
+        for(List<Rule> ruleset : result){
+            toreturn.add( new Ruleset(generatedBoards, ruleset.toArray(toarrayidentifier)));
+        }
+        return toreturn;
+    }
+    
+    /**
+     * return a list of rulesets that represent you and the rules underneath you. This is used to form a set of Ruleset objects later.
+     * by default, this just returns itself as a single list of list with one element. non-basic rules will need to do more than this
+     * @return
+     */
+    public List<List<Rule>> walk() {
+        return Arrays.asList( Arrays.asList(this));
+    }
 
     /**
      * Non-Optional method
@@ -31,4 +61,10 @@ public abstract class Rule {
      * @return the logical negation of this Rule, as a new Rule.
      */
     public abstract Rule negative();
+
+    public boolean isCompatableWith(Rule r2) {
+        return true;
+    }
+    
+    
 }

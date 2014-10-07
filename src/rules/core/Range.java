@@ -17,6 +17,14 @@ public class Range extends Rule {
     private final BitSet validValues;
     private final Attribute attribute;
     
+    public BitSet getValidValues() {
+        return validValues;
+    }
+
+    public Attribute getAttribute() {
+        return attribute;
+    }
+
     public boolean coverRule(GardenSolver gs, Ruleset myruleset){
         ArrayList<Choice> chosenAlready = new ArrayList<Choice>();
         ArrayList<Choice> open = new ArrayList<Choice>();
@@ -86,7 +94,7 @@ public class Range extends Rule {
         for(Choice c : gs){
             if(c.getAttribute() == attribute){
                 c.choose();
-                pickNElementsFromListAndRecurse(elementsRemaining--, gs, myruleset);
+                if(pickNElementsFromListAndRecurse(elementsRemaining-1, gs, myruleset)) return true;
                 c.open();
             }
         }

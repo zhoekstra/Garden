@@ -1,13 +1,16 @@
 package rules.core;
 
-import java.util.ArrayList;
-
-import rules.common.Rule;
-import rules.common.Ruleset;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
 import garden.common.Position;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import rules.common.Rule;
+import rules.common.Ruleset;
 
 public class Above extends Rule{
     private final Attribute above;

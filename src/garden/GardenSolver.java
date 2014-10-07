@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class GardenSolver implements Iterable<Choice>{
     /**
@@ -170,7 +171,7 @@ public class GardenSolver implements Iterable<Choice>{
         return _choiceTable.keySet();
     }
     public Set<PieceProperty> getAllChosenProperties(){
-        Set<PieceProperty> toreturn = new HashSet<PieceProperty>();
+        Set<PieceProperty> toreturn = new TreeSet<PieceProperty>();
         for(EnumMap<Attribute, Choice> map : _choiceTable.values()){
             for(Choice c : map.values()){
                 if(c.isChosen()) toreturn.add(new PieceProperty(c.getPosition(), c.getAttribute()));
