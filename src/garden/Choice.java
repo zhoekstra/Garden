@@ -309,4 +309,11 @@ public class Choice implements Comparable<Choice> {
         
         else return getAttribute().compareTo(o.getAttribute());
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof Choice)
+            return compareTo((Choice)o) == 0;
+        else return false;
+    }
 }

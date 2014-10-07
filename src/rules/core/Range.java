@@ -6,6 +6,7 @@ import garden.GardenSolver;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.LinkedList;
 
 import rules.common.InvalidRuleException;
 import rules.common.Rule;
@@ -31,17 +32,65 @@ public class Range extends Rule {
             }
         }
         
-        // if we have a valid number of chosen attributes and all other rules downthe line are happy, we've found a solution
-        if(validValues.get(chosenAlready.size()) && myruleset.recurse(gs)) return true;
+        // if we have a valid number of chosen attributes and all other rules down the line are happy, we've found a solution
+        if(validValues.get(chosenAlready.size())){
+            // We can't have any more of this attribute chosen, since this fits, so close any remaining attributes.
+            LinkedList<Choice> closedChoices = new LinkedList<Choice>();
+            for(Choice c : gs){
+                if(c.getAttribute() == attribute){
+                    // add in reverse order so they open in the correct order.
+                    closedChoices.addFirst(c);
+                    c.close();
+                }
+            }
+            if(myruleset.recurse(gs)) return true;
+            else{
+                for(Choice c : closedChoices){
+                    c.open();
+                }
+            }
+        }
         
+        // else go through the list and grab the appropriate number of elements.
         for(int numElementsToPick = chosenAlready.size() + 1; numElementsToPick <= gs.getSize() * gs.getSize(); ++numElementsToPick){
             if(validValues.get(numElementsToPick)){
                 int elementsRemainingToPick = numElementsToPick - chosenAlready.size();
                 
-                //TODO: Black Magic. I need to figure out how to iterate over an arbitrary number of elements in a list, with the possibility of
-                // elements dropping out because of exclusions.
+                if(pickNElementsFromListAndRecurse(elementsRemainingToPick, gs, myruleset)) return true;
             }
         }
+        return false;
+    }
+    
+    private boolean pickNElementsFromListAndRecurse(int elementsRemaining, GardenSolver gs, Ruleset myruleset){
+        if(elementsRemaining == 0){
+         // We can't have any more of this attribute chosen, since this fits, so close any remaining attributes.
+            LinkedList<Choice> closedChoices = new LinkedList<Choice>();
+            for(Choice c : gs){
+                if(c.getAttribute() == attribute){
+                    // add in reverse order so they open in the correct order.
+                    closedChoices.addFirst(c);
+                    c.close();
+                }
+            }
+            if(myruleset.recurse(gs)) return true;
+            // if the next set of rules cannot find a solution, open up my nodes and return false.
+            else{
+                for(Choice c : closedChoices){
+                    c.open();
+                }
+                return false;
+            }
+        }
+        
+        for(Choice c : gs){
+            if(c.getAttribute() == attribute){
+                c.choose();
+                pickNElementsFromListAndRecurse(elementsRemaining--, gs, myruleset);
+                c.open();
+            }
+        }
+        
         return false;
     }
     

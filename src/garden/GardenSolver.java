@@ -1,14 +1,17 @@
 package garden;
 
 import garden.common.Position;
+
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class GardenSolver implements Iterable<Choice> {
     public static void main(String[] args){
@@ -154,6 +157,18 @@ public class GardenSolver implements Iterable<Choice> {
             _root.getRight().choose();
         }
         return solution;
+    }
+    public Set<Choice> choicesMade(){
+        Set<Choice> toreturn = new HashSet<Choice>();
+        // if the garden is not completely solved, return an empty set.
+        if(_root.getRight() != _root) return toreturn;
+        for (Map<Attribute, Choice> posmap : _choiceTable.values()) {
+            for (Choice choice : posmap.values()) {
+                if(choice.isChosen()) toreturn.add(choice);
+            }
+        }
+        return toreturn;
+        
     }
     public void reset(double empty_prevalence_perc) {
         // remove any additional choice exclusions rules may have applied

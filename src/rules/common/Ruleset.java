@@ -6,14 +6,28 @@ import garden.PieceProperty;
 import garden.Status;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
+import rules.core.BoardIsUnique;
+import rules.core.BoardIsValid;
 
 public class Ruleset {
-    LinkedList<Rule> rules;
+    private final LinkedList<Rule> rules;
 
     public Ruleset(Rule... rules) {
         this.rules = new LinkedList<Rule>(Arrays.asList(rules));
+        // tack on the two base rules to the end... boards must be complete and unique.
+        this.rules.add(new BoardIsValid());
+    }
+    
+    public Ruleset(Collection<Set<Choice>> existingBoards, Rule... rules) {
+        this.rules = new LinkedList<Rule>(Arrays.asList(rules));
+        // tack on the two base rules to the end... boards must be complete and unique.
+        this.rules.add(new BoardIsValid());
+        this.rules.add(new BoardIsUnique(existingBoards));
     }
 
     public List<PieceProperty> solveRuleset(GardenSolver gs){
