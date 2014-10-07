@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class GardenSolver implements Iterable<Choice> {
+public class GardenSolver implements Iterable<Choice>{
     public static void main(String[] args){
         int size = 5;
         GardenSolver gs = new GardenSolver(size,0.15);
@@ -188,6 +188,10 @@ public class GardenSolver implements Iterable<Choice> {
     public Choice getChoice(Position pos, Attribute a) {
         if(!_choiceTable.containsKey(pos)) return null;
         return _choiceTable.get(pos).get(a);
+    }
+    
+    public Set<Position> getPositions(){
+        return _choiceTable.keySet();
     }
 
     private void shuffle(double empty_prevalence_perc) {

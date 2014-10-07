@@ -26,10 +26,9 @@ public class Adjacent extends Rule {
         ArrayList<Choice> firstsAlreadyChosen = new ArrayList<Choice>();
         ArrayList<Choice> secondsAlreadyChosen = new ArrayList<Choice>();
 
-        for(int x = 0; x < gs.getSize(); ++x){
-            for(int y = 0; y < gs.getSize(); ++y){
-                Choice firstChoice = gs.getChoice(x, y, first);
-                Choice secondChoice = gs.getChoice(x, y, second);
+        for(Position position : gs.getPositions()){
+                Choice firstChoice = gs.getChoice(position, first);
+                Choice secondChoice = gs.getChoice(position, second);
                 
                 // add firstChoice to our possible list of firsts
                 if(firstChoice.isChosen()){
@@ -39,7 +38,6 @@ public class Adjacent extends Rule {
                 if(secondChoice.isChosen()){
                     secondsAlreadyChosen.add(secondChoice);
                 }
-            }
         }
         
         // if any of our already chosen A's and B's are already adjacent, we're already covered - just keep recursing.

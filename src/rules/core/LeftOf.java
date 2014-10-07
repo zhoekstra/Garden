@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.common.Position;
 import rules.common.Rule;
 import rules.common.Ruleset;
 
@@ -16,10 +17,9 @@ public class LeftOf extends Rule {
         ArrayList<Choice> leftsAlreadyChosen = new ArrayList<Choice>();
         ArrayList<Choice> rightsAlreadyChosen = new ArrayList<Choice>();
 
-        for(int x = 0; x < gs.getSize(); ++x){
-            for(int y = 0; y < gs.getSize(); ++y){
-                Choice leftChoice = gs.getChoice(x, y, left);
-                Choice rightChoice = gs.getChoice(x, y, right);
+        for(Position position : gs.getPositions()){
+                Choice leftChoice = gs.getChoice(position, left);
+                Choice rightChoice = gs.getChoice(position, right);
                 
                 // add leftChoice to our possible list of aboves only if it could have a piece to the right of it.
                 if(leftChoice.isChosen() && leftChoice.getPosition().x() != gs.getSize() - 1){
@@ -29,7 +29,6 @@ public class LeftOf extends Rule {
                 if(rightChoice.isChosen() && rightChoice.getPosition().x() != 0){
                     rightsAlreadyChosen.add(rightChoice);
                 }
-            }
         }
         
         // if we've already chosen an A above a B, then this rule is already covered. Recurse. 

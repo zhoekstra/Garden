@@ -7,6 +7,7 @@ import rules.common.Ruleset;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.common.Position;
 
 public class Above extends Rule{
     private final Attribute above;
@@ -16,10 +17,9 @@ public class Above extends Rule{
         ArrayList<Choice> abovesAlreadyChosen = new ArrayList<Choice>();
         ArrayList<Choice> belowsAlreadyChosen = new ArrayList<Choice>();
 
-        for(int x = 0; x < gs.getSize(); ++x){
-            for(int y = 0; y < gs.getSize(); ++y){
-                Choice aboveChoice = gs.getChoice(x, y, above);
-                Choice belowChoice = gs.getChoice(x, y, below);
+        for(Position position : gs.getPositions()){
+                Choice aboveChoice = gs.getChoice(position, above);
+                Choice belowChoice = gs.getChoice(position, below);
                 
                 // add aboveChoice to our possible list of aboves only if it could have a piece below it.
                 if(aboveChoice.isChosen() && aboveChoice.getPosition().y() != gs.getSize() - 1){
@@ -29,7 +29,6 @@ public class Above extends Rule{
                 if(belowChoice.isChosen() && belowChoice.getPosition().y() != 0){
                     belowsAlreadyChosen.add(belowChoice);
                 }
-            }
         }
         
         // if we've already chosen an A above a B, then this rule is already covered. Recurse. 
