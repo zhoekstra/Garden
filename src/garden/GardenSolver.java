@@ -5,7 +5,6 @@ import garden.common.Position;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -136,7 +135,7 @@ public class GardenSolver implements Iterable<Choice>{
         return solution;
     }
     public Set<Choice> choicesMade(){
-        Set<Choice> toreturn = new HashSet<Choice>();
+        Set<Choice> toreturn = new TreeSet<Choice>();
         // if the garden is not completely solved, return an empty set.
         if(_root.getRight() != _root) return toreturn;
         for (Map<Attribute, Choice> posmap : _choiceTable.values()) {

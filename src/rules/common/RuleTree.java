@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import rules.ast.Not;
 import rules.ast.Xor;
 
 public class RuleTree {
@@ -36,6 +37,10 @@ public class RuleTree {
     
     public RuleTree contrastingRuleTree(Rule other){
         return new RuleTree(generatedBoards, new Xor(root, other));
+    }
+    
+    public RuleTree negativeRuleTree(){
+        return new RuleTree(generatedBoards, new Not(root));
     }
     
     public boolean isSolvable() {
