@@ -3,9 +3,11 @@ package rules.core;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.PieceProperty;
 import garden.common.Position;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import rules.common.Rule;
 import rules.common.Ruleset;
@@ -14,12 +16,10 @@ public class Adjacent extends Rule {
     private final Attribute first;
     private final Attribute second;
     
-    private static boolean isAdjacent(Choice a, Choice b){
-        Position pa = a.getPosition();
-        Position pb = b.getPosition();
+    private static boolean isAdjacent(Position a, Position b){
         // two choices at the same position do not cover our whole "adjacent" idea, though they might be iterated over.
-        if(pa.compareTo(pb) == 0) return false;
-        return (Math.abs(pa.x() - pb.x()) <= 1 && Math.abs(pa.y() - pb.y()) <= 1);
+        if(a.compareTo(b) == 0) return false;
+        return (Math.abs(a.x() - b.x()) <= 1 && Math.abs(a.y() - b.y()) <= 1);
     }
     
     public boolean coverRule(GardenSolver gs, Ruleset myruleset) {
@@ -43,7 +43,7 @@ public class Adjacent extends Rule {
         // if any of our already chosen A's and B's are already adjacent, we're already covered - just keep recursing.
         for(Choice a : firstsAlreadyChosen){
             for(Choice b : secondsAlreadyChosen){
-                if(isAdjacent(a,b)) return myruleset.recurse(gs);
+                if(isAdjacent(a.getPosition(),b.getPosition())) return myruleset.recurse(gs);
             }
         }
         
@@ -51,7 +51,7 @@ public class Adjacent extends Rule {
         for(Choice tochoose : gs){
             if(tochoose.getAttribute() == first){
                 for(Choice alreadyChosen : secondsAlreadyChosen){
-                    if(isAdjacent(tochoose, alreadyChosen)){
+                    if(isAdjacent(tochoose.getPosition(), alreadyChosen.getPosition())){
                         tochoose.choose();
                         if(myruleset.recurse(gs)) return true;
                         tochoose.open();
@@ -60,7 +60,7 @@ public class Adjacent extends Rule {
             }
             else if(tochoose.getAttribute() == second){
                 for(Choice alreadyChosen : firstsAlreadyChosen){
-                    if(isAdjacent(tochoose, alreadyChosen)){
+                    if(isAdjacent(tochoose.getPosition(), alreadyChosen.getPosition())){
                         tochoose.choose();
                         if(myruleset.recurse(gs)) return true;
                         tochoose.open();
@@ -75,18 +75,28 @@ public class Adjacent extends Rule {
                 firsttochoose.choose();
                 
                 for(Choice secondtochoose : gs){
-                    if(secondtochoose.getAttribute() == second && isAdjacent(firsttochoose, secondtochoose)){
+                    if(secondtochoose.getAttribute() == second && isAdjacent(firsttochoose.getPosition(), secondtochoose.getPosition())){
                         secondtochoose.choose();
                         if(myruleset.recurse(gs)) return true;
                         secondtochoose.open();
                     }
                 }
-                
                 firsttochoose.open();
             }
         }
         
         // if we can't find any of the above, this rule is impossible
+        return false;
+    }
+    
+    public boolean followsRule(Set<PieceProperty> board){
+        for(PieceProperty pfirst : board){
+            if(pfirst.getAttribute() == first){
+                for(PieceProperty psecond : board){
+                    if(psecond.getAttribute() == second && isAdjacent(pfirst.getPosition(), psecond.getPosition())) return true;
+                }
+            }
+        }
         return false;
     }
     
@@ -109,6 +119,21 @@ public class Adjacent extends Rule {
             this.first = second;
             this.second = first;
         }
+    }
+    
+    public boolean isCompatableWith(Rule r2){
+        if(r2 instanceof NotAdjacent){
+            NotAdjacent rule = (NotAdjacent)r2;
+            if(rule.getFirst() == first && rule.getSecond() == second) return false;
+            else return true;
+        }
+        else if(r2 instanceof Range){
+            Range rule = (Range)r2;
+            if(first == second && rule.getAttribute() == first) return rule.canBeAtLeast(2);
+            else if(rule.getAttribute() == first || rule.getAttribute() == second) return rule.canBeAtLeast(1);
+            else return true;
+        }
+        return true;
     }
 
 

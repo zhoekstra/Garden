@@ -3,11 +3,11 @@ package rules.core;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.PieceProperty;
 import garden.common.Position;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import rules.common.Rule;
 import rules.common.Ruleset;
@@ -86,6 +86,32 @@ public class Above extends Rule{
         // if we can't find anything like this, then we have no possible way to cover this rule. return false.
         return false;
         
+    }
+    
+    public boolean followsRule(Set<PieceProperty> board){
+        for(PieceProperty pabove : board){
+            if(pabove.getAttribute() == above){
+                for(PieceProperty pbelow : board){
+                    if(pbelow.getAttribute() == below && pbelow.getPosition().y() > pabove.getPosition().y()) return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean isCompatableWith(Rule r2){
+        if(r2 instanceof NotAbove){
+            NotAbove rule = (NotAbove)r2;
+            if(rule.getAbove() == above && rule.getBelow() == below) return false;
+            else return true;
+        }
+        else if(r2 instanceof Range){
+            Range rule = (Range)r2;
+            if(above == below && rule.getAttribute() == above) return rule.canBeAtLeast(2);
+            else if(rule.getAttribute() == above || rule.getAttribute() == below) return rule.canBeAtLeast(1);
+            else return true;
+        }
+        return true;
     }
     
     public Attribute getAbove() {

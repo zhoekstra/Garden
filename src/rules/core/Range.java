@@ -3,10 +3,12 @@ package rules.core;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.PieceProperty;
 
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import rules.common.InvalidRuleException;
 import rules.common.Rule;
@@ -102,6 +104,33 @@ public class Range extends Rule {
         return false;
     }
     
+    public boolean followsRule(Set<PieceProperty> board){
+        int count = 0;
+        for(PieceProperty p : board){
+            if(p.getAttribute() == attribute) ++count;
+        }
+        return validValues.get(count);
+    }
+    
+    public boolean isCompatableWith(Rule r2){
+        if(r2 instanceof Range){
+            Range rule = (Range)r2;
+            if(rule.getAttribute() == attribute){
+                try {
+                    BitSet copy = (BitSet)this.clone();
+                    copy.and(rule.getValidValues());
+                    return copy.cardinality() > 0;
+                } catch (CloneNotSupportedException e) {
+                    // I KNOW this is going to be a BitSet. What do I do here? Don't want to throw an Exception
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            else return true;
+        }
+        else return true;
+    }
+    
     public Range(int boardSize, Attribute attribute, int... validvalues) throws InvalidRuleException{
         if(validvalues.length == 0)
             throw new InvalidRuleException("This rule cannot fit any board");
@@ -155,6 +184,13 @@ public class Range extends Rule {
         validValues.set(exactly);
         
         return new Range(boardSize, attribute, validValues);
+    }
+    
+    public boolean canBeAtLeast(int amount){
+        for(int i = amount; i <= maxSize; ++i){
+            if(validValues.get(i)) return true;
+        }
+        return false;
     }
 
     @Override

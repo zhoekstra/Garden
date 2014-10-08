@@ -1,8 +1,11 @@
 package rules.core;
 
+import java.util.Set;
+
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.PieceProperty;
 import rules.common.Rule;
 
 public class NotLeftOf extends Rule {
@@ -24,6 +27,26 @@ public class NotLeftOf extends Rule {
                 }
             }
         }
+    }
+    
+    public boolean followsRule(Set<PieceProperty> board){
+        for(PieceProperty pleft : board){
+            if(pleft.getAttribute() == left){
+                for(PieceProperty pright : board){
+                    if(pright.getAttribute() == right && pright.getPosition().x() > pleft.getPosition().x()) return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean isCompatableWith(Rule r2){
+        if(r2 instanceof LeftOf){
+            LeftOf rule = (LeftOf)r2;
+            if(rule.getLeft() == left && rule.getRight() == right) return false;
+            else return true;
+        }
+        return true;
     }
     
     public Attribute getLeft() {

@@ -22,10 +22,14 @@ public class BoardIsUnique extends Rule {
         if(currentBoard.size() == 0) return false;
         
         for(Set<PieceProperty> existingBoard : existingBoards){
-            if(!currentBoard.equals(existingBoard)) return false;
+            if(currentBoard.equals(existingBoard)) return false;
         }
         // if this board does not match up with any existing boards, this rule is covered.
         return myruleset.recurse(gs);
+    }
+    
+    public boolean followsRule(Set<PieceProperty> board){
+        return false;
     }
 
     @Override

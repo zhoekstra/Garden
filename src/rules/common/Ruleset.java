@@ -25,9 +25,7 @@ public class Ruleset {
     }
     
     public Ruleset(Collection<Set<PieceProperty>> existingBoards, Rule... rules) {
-        this.rules = new LinkedList<Rule>(Arrays.asList(rules));
-        // tack on the two base rules to the end... boards must be complete and unique.
-        this.rules.add(new BoardIsValid());
+        this(rules);
         this.rules.add(new BoardIsUnique(existingBoards));
     }
     

@@ -5,6 +5,7 @@ import garden.PieceProperty;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -23,8 +24,8 @@ public class RuleTree {
     public RuleTree(Rule rootrule){
         root = rootrule;
         representedRulesets = root.walkRulesets(generatedBoards);
-        for(Ruleset r : representedRulesets){
-            if(!r.isValidRuleset()) representedRulesets.remove(r);
+        for(Iterator<Ruleset> i = representedRulesets.iterator(); i.hasNext();){
+            if(!i.next().isValidRuleset()) i.remove();
         }
     }
     
@@ -52,5 +53,9 @@ public class RuleTree {
             }
         }
         return new TreeSet<PieceProperty>();
+    }
+    
+    public boolean isValidForBoard(Set<PieceProperty> board){
+        return root.followsRule(board);
     }
 }

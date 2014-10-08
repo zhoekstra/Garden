@@ -1,11 +1,14 @@
 package rules.core;
 
-import java.util.ArrayList;
-
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.PieceProperty;
 import garden.common.Position;
+
+import java.util.ArrayList;
+import java.util.Set;
+
 import rules.common.Rule;
 import rules.common.Ruleset;
 
@@ -69,13 +72,14 @@ public class LeftOf extends Rule {
                 leftchoice.choose();
                 
                 for(Choice rightchoice : gs){
-                    if(rightchoice.getAttribute() == right && rightchoice.getPosition().x() > leftchoice.getPosition().y()){
+                    if(rightchoice.getAttribute() == right && rightchoice.getPosition().x() > leftchoice.getPosition().x()){
                         rightchoice.choose();
                         if(myruleset.recurse(gs)) return true;
+                        System.out.println("right "+rightchoice+" was not valid LeftOf.");
                         rightchoice.open();
                     }
                 }
-                
+                System.out.println("left "+leftchoice+" was not valid RightOf.");
                 leftchoice.open();
             }
         }
@@ -83,6 +87,32 @@ public class LeftOf extends Rule {
         // if we can't find anything like this, then we have no possible way to cover this rule. return false.
         return false;
         
+    }
+    
+    public boolean followsRule(Set<PieceProperty> board){
+        for(PieceProperty pleft : board){
+            if(pleft.getAttribute() == left){
+                for(PieceProperty pright : board){
+                    if(pright.getAttribute() == right && pright.getPosition().x() > pleft.getPosition().x()) return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean isCompatableWith(Rule r2){
+        if(r2 instanceof NotLeftOf){
+            NotLeftOf rule = (NotLeftOf)r2;
+            if(rule.getLeft() == left && rule.getRight() == right) return false;
+            else return true;
+        }
+        else if(r2 instanceof Range){
+            Range rule = (Range)r2;
+            if(left == right && rule.getAttribute() == left) return rule.canBeAtLeast(2);
+            else if(rule.getAttribute() == left || rule.getAttribute() == right) return rule.canBeAtLeast(1);
+            else return true;
+        }
+        return true;
     }
     
     public Attribute getLeft() {

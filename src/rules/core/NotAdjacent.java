@@ -1,9 +1,13 @@
 package rules.core;
 
+import java.util.Set;
+
 import rules.common.Rule;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.PieceProperty;
+import garden.common.Position;
 
 public class NotAdjacent extends Rule {
     private final Attribute first;
@@ -26,6 +30,32 @@ public class NotAdjacent extends Rule {
             }
         }
     }
+    
+    private static boolean isAdjacent(Position a, Position b){
+        // two choices at the same position do not cover our whole "adjacent" idea, though they might be iterated over.
+        if(a.compareTo(b) == 0) return false;
+        return (Math.abs(a.x() - b.x()) <= 1 && Math.abs(a.y() - b.y()) <= 1);
+    }
+    
+    public boolean followsRule(Set<PieceProperty> board){
+        for(PieceProperty pfirst : board){
+            if(pfirst.getAttribute() == first){
+                for(PieceProperty psecond : board){
+                    if(psecond.getAttribute() == second && isAdjacent(pfirst.getPosition(), psecond.getPosition())) return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean isCompatableWith(Rule r2){
+        if(r2 instanceof Adjacent){
+            Adjacent rule = (Adjacent)r2;
+            if(rule.getFirst() == first && rule.getSecond() == second) return false;
+            else return true;
+        }
+        return true;
+    }
 
     @Override
     public Rule negative() {
@@ -43,6 +73,14 @@ public class NotAdjacent extends Rule {
         }
     }
     
+    public Attribute getFirst() {
+        return first;
+    }
+
+    public Attribute getSecond() {
+        return second;
+    }
+
     public boolean equals(Object o){
         return (o instanceof NotAdjacent) && ((NotAdjacent)o).first == first && ((NotAdjacent)o).second == second;
     }

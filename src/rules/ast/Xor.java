@@ -1,7 +1,10 @@
 package rules.ast;
 
+import garden.PieceProperty;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import rules.common.Rule;
 
@@ -9,12 +12,12 @@ public class Xor extends Rule {
     private final Rule left;
     private final Rule right;
     
-    public List<List<Rule>> walk() {
+    public List<List<Rule>> walkAndCreateRulesets() {
         List<List<Rule>> toreturn =new LinkedList<List<Rule>>();
         
         // add !left && right
-        for(List<Rule> leftruleset : left.negative().walk()){
-            for(List<Rule> rightruleset : right.walk()){
+        for(List<Rule> leftruleset : left.negative().walkAndCreateRulesets()){
+            for(List<Rule> rightruleset : right.walkAndCreateRulesets()){
                 LinkedList<Rule> newList = new LinkedList<Rule>(leftruleset);
                 newList.addAll(rightruleset);
                 toreturn.add(newList);
@@ -22,8 +25,8 @@ public class Xor extends Rule {
         }
         
         // add left && !right
-        for(List<Rule> leftruleset : left.walk()){
-            for(List<Rule> rightruleset : right.negative().walk()){
+        for(List<Rule> leftruleset : left.walkAndCreateRulesets()){
+            for(List<Rule> rightruleset : right.negative().walkAndCreateRulesets()){
                 LinkedList<Rule> newList = new LinkedList<Rule>(leftruleset);
                 newList.addAll(rightruleset);
                 toreturn.add(newList);
@@ -54,6 +57,11 @@ public class Xor extends Rule {
                 new And(left.negative(), right.negative()),
                 new And(left, right)
                 );
+    }
+
+    @Override
+    public boolean followsRule(Set<PieceProperty> board) {
+        return left.followsRule(board) ^ right.followsRule(board);
     }
 
 }

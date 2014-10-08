@@ -1,8 +1,11 @@
 package rules.core;
 
+import java.util.Set;
+
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
+import garden.PieceProperty;
 import rules.common.Rule;
 
 public class NotAbove extends Rule {
@@ -24,6 +27,26 @@ public class NotAbove extends Rule {
                 }
             }
         }
+    }
+    
+    public boolean followsRule(Set<PieceProperty> board){
+        for(PieceProperty pabove : board){
+            if(pabove.getAttribute() == above){
+                for(PieceProperty pbelow : board){
+                    if(pbelow.getAttribute() == below && pbelow.getPosition().y() > pabove.getPosition().y()) return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean isCompatableWith(Rule r2){
+        if(r2 instanceof Above){
+            Above rule = (Above)r2;
+            if(rule.getAbove() == above && rule.getBelow() == below) return false;
+            else return true;
+        }
+        return true;
     }
     
     

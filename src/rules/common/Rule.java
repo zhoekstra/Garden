@@ -38,7 +38,7 @@ public abstract class Rule {
      */
     public final List<Ruleset> walkRulesets(List<Set<PieceProperty>> generatedBoards){
         List<Ruleset> toreturn = new LinkedList<Ruleset>();
-        List<List<Rule>> result = this.walk();
+        List<List<Rule>> result = this.walkAndCreateRulesets();
         Rule[] toarrayidentifier = new Rule[0];
         for(List<Rule> ruleset : result){
             toreturn.add( new Ruleset(generatedBoards, ruleset.toArray(toarrayidentifier)));
@@ -51,9 +51,11 @@ public abstract class Rule {
      * by default, this just returns itself as a single list of list with one element. non-basic rules will need to do more than this
      * @return
      */
-    public List<List<Rule>> walk() {
+    public List<List<Rule>> walkAndCreateRulesets() {
         return Arrays.asList( Arrays.asList(this));
     }
+    
+    public abstract boolean followsRule(Set<PieceProperty> board);
 
     /**
      * Non-Optional method
