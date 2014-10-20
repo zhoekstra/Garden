@@ -1,8 +1,8 @@
 package rules.other;
 
-import garden.Choice;
-import garden.GardenSolver;
-import garden.PieceProperty;
+import garden.common.Choice;
+import garden.common.PieceProperty;
+import garden.solver.GardenSolver;
 
 import java.util.Collection;
 import java.util.Set;

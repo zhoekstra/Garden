@@ -1,4 +1,4 @@
-package garden;
+package garden.common;
 
 public enum Attribute {
     // this piece has no Attributes. Mutually exclusive with every other

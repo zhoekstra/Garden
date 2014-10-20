@@ -1,7 +1,7 @@
 package rules.common;
 
-import garden.GardenSolver;
-import garden.PieceProperty;
+import garden.common.PieceProperty;
+import garden.solver.GardenSolver;
 
 import java.util.ArrayList;
 import java.util.Collections;

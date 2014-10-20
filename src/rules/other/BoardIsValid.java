@@ -1,9 +1,9 @@
 package rules.other;
 
-import garden.Choice;
-import garden.GardenSolver;
-import garden.PieceProperty;
+import garden.common.Choice;
+import garden.common.PieceProperty;
 import garden.common.Position;
+import garden.solver.GardenSolver;
 
 import java.util.Iterator;
 import java.util.LinkedList;

@@ -1,10 +1,10 @@
 package rules.core;
 
-import garden.Attribute;
-import garden.Choice;
-import garden.GardenSolver;
-import garden.PieceProperty;
+import garden.common.Attribute;
+import garden.common.Choice;
+import garden.common.PieceProperty;
 import garden.common.Position;
+import garden.solver.GardenSolver;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

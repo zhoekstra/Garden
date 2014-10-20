@@ -1,6 +1,4 @@
-package garden;
-
-import garden.common.Position;
+package garden.common;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

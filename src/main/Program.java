@@ -1,7 +1,7 @@
 package main;
 
-import garden.Attribute;
-import garden.PieceProperty;
+import garden.common.Attribute;
+import garden.common.PieceProperty;
 import garden.common.Position;
 
 import java.util.LinkedList;

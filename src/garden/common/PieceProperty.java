@@ -1,6 +1,5 @@
-package garden;
+package garden.common;
 
-import garden.common.Position;
 
 public class PieceProperty implements Comparable<PieceProperty> {
     public final Position position;

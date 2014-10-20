@@ -1,5 +1,8 @@
-package garden;
+package garden.solver;
 
+import garden.common.Attribute;
+import garden.common.Choice;
+import garden.common.PieceProperty;
 import garden.common.Position;
 
 import java.util.Collections;

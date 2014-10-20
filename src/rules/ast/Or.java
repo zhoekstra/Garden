@@ -1,6 +1,6 @@
 package rules.ast;
 
-import garden.PieceProperty;
+import garden.common.PieceProperty;
 
 import java.util.LinkedList;
 import java.util.List;

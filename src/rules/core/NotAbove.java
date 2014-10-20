@@ -2,10 +2,10 @@ package rules.core;
 
 import java.util.Set;
 
-import garden.Attribute;
-import garden.Choice;
-import garden.GardenSolver;
-import garden.PieceProperty;
+import garden.common.Attribute;
+import garden.common.Choice;
+import garden.common.PieceProperty;
+import garden.solver.GardenSolver;
 import rules.common.Rule;
 import rules.common.RuleType;
 

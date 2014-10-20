@@ -1,4 +1,4 @@
-package garden;
+package garden.common;
 
 //The Choices current status.
 public enum Status {
