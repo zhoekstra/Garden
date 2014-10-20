@@ -71,4 +71,15 @@ public class NotAbove extends Rule {
         return new Above(above,below);
     }
 
+    public Rule reduce(Rule r){
+        if(r instanceof NotAbove){
+            NotAbove r2 = (NotAbove)r;
+            if(r2.getAbove() == above && r2.getBelow() == below) return this;
+        }
+        return null;
+    }
+    
+    public String toString(){
+        return "!["+above+" above "+below+"]";
+    }
 }

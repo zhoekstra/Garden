@@ -7,6 +7,7 @@ import garden.PieceProperty;
 import garden.common.Position;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Set;
 
 import rules.common.Rule;
@@ -135,5 +136,30 @@ public class Above extends Rule{
     public Rule negative() {
         return new NotAbove(above, below);
     }
-
+    
+    public Rule reduce(Rule r){
+        if(r instanceof Above){
+            Above r2 = (Above)r;
+            if(r2.getAbove() == above && r2.getBelow() == below) return this;
+        }
+        return null;
+    }
+    
+    public void updateMinumumAmountRequired(EnumMap<Attribute,Integer> amountrequired) {
+        if(above==below){
+            int curramountreq = amountrequired.containsKey(above) ? amountrequired.get(above) : 0;
+            amountrequired.put(above, Math.max(curramountreq, 2));
+        }
+        else{
+            int curramountreq = amountrequired.containsKey(above) ? amountrequired.get(above) : 0;
+            amountrequired.put(above, Math.max(curramountreq, 1));
+            
+            curramountreq = amountrequired.containsKey(below) ? amountrequired.get(below) : 0;
+            amountrequired.put(below, Math.max(curramountreq, 1));
+        }
+    }
+    
+    public String toString(){
+        return "["+above+" above "+below+"]";
+    }
 }

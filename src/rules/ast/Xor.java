@@ -64,4 +64,7 @@ public class Xor extends Rule {
         return left.followsRule(board) ^ right.followsRule(board);
     }
 
+    public String toString(){
+        return "[ "+left.toString()+" XOR "+right.toString()+" ]";
+    }
 }

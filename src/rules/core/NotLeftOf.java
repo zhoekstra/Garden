@@ -69,5 +69,16 @@ public class NotLeftOf extends Rule {
     public Rule negative() {
         return new LeftOf(left,right);
     }
+    
+    public Rule reduce(Rule r){
+        if(r instanceof NotLeftOf){
+            NotLeftOf r2 = (NotLeftOf)r;
+            if(r2.getLeft() == left && r2.getRight() == right) return this;
+        }
+        return null;
+    }
 
+    public String toString(){
+        return "!["+left+" leftof "+right+"]";
+    }
 }

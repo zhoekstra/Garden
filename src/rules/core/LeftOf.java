@@ -7,6 +7,7 @@ import garden.PieceProperty;
 import garden.common.Position;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Set;
 
 import rules.common.Rule;
@@ -136,5 +137,30 @@ public class LeftOf extends Rule {
     public Rule negative() {
         return new NotLeftOf(left,right);
     }
-
+    
+    public Rule reduce(Rule r){
+        if(r instanceof LeftOf){
+            LeftOf r2 = (LeftOf)r;
+            if(r2.getLeft() == left && r2.getRight() == right) return this;
+        }
+        return null;
+    }
+    
+    public void updateMinumumAmountRequired(EnumMap<Attribute,Integer> amountrequired) {
+        if(left==right){
+            int curramountreq = amountrequired.containsKey(left) ? amountrequired.get(left) : 0;
+            amountrequired.put(left, Math.max(curramountreq, 2));
+        }
+        else{
+            int curramountreq = amountrequired.containsKey(left) ? amountrequired.get(left) : 0;
+            amountrequired.put(left, Math.max(curramountreq, 1));
+            
+            curramountreq = amountrequired.containsKey(right) ? amountrequired.get(right) : 0;
+            amountrequired.put(right, Math.max(curramountreq, 1));
+        }
+    }
+    
+    public String toString(){
+        return "["+left+" leftof "+right+"]";
+    }
 }

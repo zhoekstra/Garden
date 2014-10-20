@@ -4,15 +4,15 @@ import garden.Attribute;
 import garden.PieceProperty;
 import garden.common.Position;
 
+import java.util.LinkedList;
 import java.util.Set;
 
 import rules.ast.And;
-import rules.ast.Not;
 import rules.ast.Xor;
 import rules.common.InvalidRuleException;
 import rules.common.RuleTree;
 import rules.core.LeftOf;
-import rules.core.NotAdjacent;
+import rules.core.NotLeftOf;
 
 public class Program {
     
@@ -56,6 +56,8 @@ public class Program {
             case Statue:
                 printboard[pos.x()][pos.y()][2] = "Budha";
                 break;
+            default:
+                break;
             }
         }
         
@@ -75,16 +77,24 @@ public class Program {
         RuleTree ruleset = new RuleTree(
             
             new And(
-                new NotAdjacent(Attribute.Statue, Attribute.Water),
+                new NotLeftOf(Attribute.Water, Attribute.Statue),
                 new Xor(
                     new LeftOf(Attribute.Water, Attribute.Statue),
                     new LeftOf(Attribute.Statue, Attribute.Water)
                     )
                 )
             );
-        for(int i = 0; i < 10; ++i){
+        LinkedList<Set<PieceProperty>> boards = new LinkedList<Set<PieceProperty>>();
+        long starttime = System.nanoTime();
+        for(int i = 0; i < 2000; ++i){
+            //System.out.println(i + " =====================================================");
             Set<PieceProperty> board = ruleset.solve();
-            if(ruleset.isValidForBoard(board)) printBoard(board);
+            if(ruleset.isValidForBoard(board)) boards.add(board);
         }
+        long endtime = System.nanoTime();
+        for(Set<PieceProperty> i : boards){
+            printBoard(i);
+        }
+        System.out.println(endtime-starttime);
     }
 }

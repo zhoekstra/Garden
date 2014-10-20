@@ -44,5 +44,9 @@ public class Or extends Rule {
         // !(A || B) == !A && !B
         return new And(left.negative(), right.negative());
     }
+    
+    public String toString(){
+        return "[ "+left.toString()+" OR "+right.toString()+" ]";
+    }
 
 }

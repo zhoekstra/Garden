@@ -47,5 +47,8 @@ public class And extends Rule {
         // !(A && B) == !A || !B
         return new Or(left.negative(), right.negative());
     }
-
+    
+    public String toString(){
+        return "[ "+left.toString()+" AND "+right.toString()+" ]";
+    }
 }

@@ -7,6 +7,7 @@ import garden.PieceProperty;
 import garden.common.Position;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Set;
 
 import rules.common.Rule;
@@ -140,6 +141,32 @@ public class Adjacent extends Rule {
     @Override
     public Rule negative() {
         return new NotAdjacent(first,second);
+    }
+    
+    public Rule reduce(Rule r){
+        if(r instanceof Adjacent){
+            Adjacent r2 = (Adjacent)r;
+            if(r2.getFirst() == first && r2.getSecond() == second) return this;
+        }
+        return null;
+    }
+    
+    public void updateMinumumAmountRequired(EnumMap<Attribute,Integer> amountrequired) {
+        if(first==second){
+            int curramountreq = amountrequired.containsKey(first) ? amountrequired.get(first) : 0;
+            amountrequired.put(first, Math.max(curramountreq, 2));
+        }
+        else{
+            int curramountreq = amountrequired.containsKey(first) ? amountrequired.get(first) : 0;
+            amountrequired.put(first, Math.max(curramountreq, 1));
+            
+            curramountreq = amountrequired.containsKey(second) ? amountrequired.get(second) : 0;
+            amountrequired.put(second, Math.max(curramountreq, 1));
+        }
+    }
+    
+    public String toString(){
+        return "["+first+" adjacent "+second+"]";
     }
 
 }

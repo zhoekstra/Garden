@@ -1,9 +1,11 @@
 package rules.common;
 
+import garden.Attribute;
 import garden.GardenSolver;
 import garden.PieceProperty;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -67,6 +69,18 @@ public abstract class Rule {
     public boolean isCompatableWith(Rule r2) {
         return true;
     }
+    
+    /**
+     * Attempt to reduce this rule and the rule passed into a single Rule that covers both of their requirements.
+     * If you can merge these rules, return the Rule that covers both of them. If not, return null.
+     * @param r The Rule to check this against
+     * @return The Rule that covers both these rules, or null if no such Rule exists.
+     */
+    public Rule reduce(Rule r){
+        return null;
+    }
+    
+    public void updateMinumumAmountRequired(EnumMap<Attribute,Integer> amountrequired) {}
     
     
 }

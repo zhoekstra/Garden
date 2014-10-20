@@ -85,4 +85,15 @@ public class NotAdjacent extends Rule {
         return (o instanceof NotAdjacent) && ((NotAdjacent)o).first == first && ((NotAdjacent)o).second == second;
     }
 
+    public Rule reduce(Rule r){
+        if(r instanceof NotAdjacent){
+            NotAdjacent r2 = (NotAdjacent)r;
+            if(r2.getFirst() == first && r2.getSecond() == second) return this;
+        }
+        return null;
+    }
+    
+    public String toString(){
+        return "!["+first+" adjacent "+second+"]";
+    }
 }

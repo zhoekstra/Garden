@@ -33,5 +33,7 @@ public class Not extends Rule {
         return rule;
     }
 
-
+    public String toString(){
+        return "![ "+rule.toString()+" ]";
+    }
 }

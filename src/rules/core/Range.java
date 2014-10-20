@@ -7,6 +7,7 @@ import garden.PieceProperty;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -113,6 +114,9 @@ public class Range extends Rule {
     }
     
     public boolean isCompatableWith(Rule r2){
+        // if no amount of this attribute is valid, this Range, and thus thw whole ruleset, is invalid
+        if(this.validValues.cardinality() == 0) return false;
+        
         if(r2 instanceof Range){
             Range rule = (Range)r2;
             if(rule.getAttribute() == attribute){
@@ -201,4 +205,31 @@ public class Range extends Rule {
         return toreturn;
     }
 
+    public Rule reduce(Rule r){
+        if(r instanceof Range){
+            Range r2 = (Range)r;
+            if(r2.getAttribute() == attribute){
+                BitSet toreturn = (BitSet)this.validValues.clone();
+                toreturn.and(r2.getValidValues());
+                return new Range(maxSize, attribute, toreturn);
+            }
+        }
+        return null;
+    }
+    
+    public void updateMinumumAmountRequired(EnumMap<Attribute,Integer> amountrequired) {
+        int rangeamountrequired = 0;
+        for(; rangeamountrequired < maxSize; rangeamountrequired++)
+            if(validValues.get(rangeamountrequired)) break;
+        
+        int curramountreq = amountrequired.containsKey(attribute) ? amountrequired.get(attribute) : 0;
+        amountrequired.put(attribute, Math.max(rangeamountrequired,curramountreq));
+    }
+    
+    public String toString(){
+        String toreturn = "[ "+attribute+" range ";
+        for(int i = 0; i < maxSize; ++i)
+            if(validValues.get(i)) toreturn+=i+" ";
+        return toreturn+"]";
+    }
 }
