@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import rules.common.Rule;
+import rules.common.RuleType;
 
 public class Or extends Rule {
     private final Rule left;
@@ -48,5 +49,6 @@ public class Or extends Rule {
     public String toString(){
         return "[ "+left.toString()+" OR "+right.toString()+" ]";
     }
-
+    
+    public RuleType type(){ return RuleType.Or; }
 }

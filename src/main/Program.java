@@ -8,11 +8,12 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import rules.ast.And;
-import rules.ast.Xor;
 import rules.common.InvalidRuleException;
 import rules.common.RuleTree;
+import rules.core.Above;
 import rules.core.LeftOf;
-import rules.core.NotLeftOf;
+import rules.core.Range;
+import rules.generator.RuleGenerator;
 
 public class Program {
     
@@ -77,10 +78,13 @@ public class Program {
         RuleTree ruleset = new RuleTree(
             
             new And(
-                new NotLeftOf(Attribute.Water, Attribute.Statue),
-                new Xor(
-                    new LeftOf(Attribute.Water, Attribute.Statue),
-                    new LeftOf(Attribute.Statue, Attribute.Water)
+                new And(
+                    new Range(16, Attribute.Water, 8,9,10),
+                    new Range(16, Attribute.White, 7,8,9)
+                    ),
+                new And(
+                    new Range(16, Attribute.Water, 10, 11, 12),
+                    new Range(16, Attribute.Gray, 1,2,3)
                     )
                 )
             );

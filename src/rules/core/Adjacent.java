@@ -11,6 +11,7 @@ import java.util.EnumMap;
 import java.util.Set;
 
 import rules.common.Rule;
+import rules.common.RuleType;
 import rules.common.Ruleset;
 
 public class Adjacent extends Rule {
@@ -123,12 +124,12 @@ public class Adjacent extends Rule {
     }
     
     public boolean isCompatableWith(Rule r2){
-        if(r2 instanceof NotAdjacent){
+        if(r2.type() == RuleType.NotAdjacent){
             NotAdjacent rule = (NotAdjacent)r2;
             if(rule.getFirst() == first && rule.getSecond() == second) return false;
             else return true;
         }
-        else if(r2 instanceof Range){
+        else if(r2.type() == RuleType.Range){
             Range rule = (Range)r2;
             if(first == second && rule.getAttribute() == first) return rule.canBeAtLeast(2);
             else if(rule.getAttribute() == first || rule.getAttribute() == second) return rule.canBeAtLeast(1);
@@ -144,7 +145,7 @@ public class Adjacent extends Rule {
     }
     
     public Rule reduce(Rule r){
-        if(r instanceof Adjacent){
+        if(r.type() == RuleType.Adjacent){
             Adjacent r2 = (Adjacent)r;
             if(r2.getFirst() == first && r2.getSecond() == second) return this;
         }
@@ -168,5 +169,5 @@ public class Adjacent extends Rule {
     public String toString(){
         return "["+first+" adjacent "+second+"]";
     }
-
+    public RuleType type(){ return RuleType.Adjacent; }
 }

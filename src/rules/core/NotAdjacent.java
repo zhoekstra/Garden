@@ -3,6 +3,7 @@ package rules.core;
 import java.util.Set;
 
 import rules.common.Rule;
+import rules.common.RuleType;
 import garden.Attribute;
 import garden.Choice;
 import garden.GardenSolver;
@@ -49,7 +50,7 @@ public class NotAdjacent extends Rule {
     }
     
     public boolean isCompatableWith(Rule r2){
-        if(r2 instanceof Adjacent){
+        if(r2.type() == RuleType.Adjacent){
             Adjacent rule = (Adjacent)r2;
             if(rule.getFirst() == first && rule.getSecond() == second) return false;
             else return true;
@@ -81,12 +82,8 @@ public class NotAdjacent extends Rule {
         return second;
     }
 
-    public boolean equals(Object o){
-        return (o instanceof NotAdjacent) && ((NotAdjacent)o).first == first && ((NotAdjacent)o).second == second;
-    }
-
     public Rule reduce(Rule r){
-        if(r instanceof NotAdjacent){
+        if(r.type() == RuleType.NotAdjacent){
             NotAdjacent r2 = (NotAdjacent)r;
             if(r2.getFirst() == first && r2.getSecond() == second) return this;
         }
@@ -96,4 +93,6 @@ public class NotAdjacent extends Rule {
     public String toString(){
         return "!["+first+" adjacent "+second+"]";
     }
+    
+    public RuleType type(){ return RuleType.NotAdjacent; }
 }

@@ -13,6 +13,7 @@ import java.util.Set;
 
 import rules.common.InvalidRuleException;
 import rules.common.Rule;
+import rules.common.RuleType;
 import rules.common.Ruleset;
 
 public class Range extends Rule {
@@ -117,7 +118,7 @@ public class Range extends Rule {
         // if no amount of this attribute is valid, this Range, and thus thw whole ruleset, is invalid
         if(this.validValues.cardinality() == 0) return false;
         
-        if(r2 instanceof Range){
+        if(r2.type() == RuleType.Range){
             Range rule = (Range)r2;
             if(rule.getAttribute() == attribute){
                 try {
@@ -206,7 +207,7 @@ public class Range extends Rule {
     }
 
     public Rule reduce(Rule r){
-        if(r instanceof Range){
+        if(r.type() == RuleType.Range){
             Range r2 = (Range)r;
             if(r2.getAttribute() == attribute){
                 BitSet toreturn = (BitSet)this.validValues.clone();
@@ -232,4 +233,6 @@ public class Range extends Rule {
             if(validValues.get(i)) toreturn+=i+" ";
         return toreturn+"]";
     }
+    
+    public RuleType type(){ return RuleType.Range; }
 }

@@ -82,5 +82,7 @@ public abstract class Rule {
     
     public void updateMinumumAmountRequired(EnumMap<Attribute,Integer> amountrequired) {}
     
+    public abstract RuleType type();
+    
     
 }

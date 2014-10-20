@@ -7,6 +7,7 @@ import garden.Choice;
 import garden.GardenSolver;
 import garden.PieceProperty;
 import rules.common.Rule;
+import rules.common.RuleType;
 
 public class NotLeftOf extends Rule {
     private final Attribute left;
@@ -41,7 +42,7 @@ public class NotLeftOf extends Rule {
     }
     
     public boolean isCompatableWith(Rule r2){
-        if(r2 instanceof LeftOf){
+        if(r2.type() == RuleType.LeftOf){
             LeftOf rule = (LeftOf)r2;
             if(rule.getLeft() == left && rule.getRight() == right) return false;
             else return true;
@@ -71,7 +72,7 @@ public class NotLeftOf extends Rule {
     }
     
     public Rule reduce(Rule r){
-        if(r instanceof NotLeftOf){
+        if(r.type() == RuleType.NotLeftOf){
             NotLeftOf r2 = (NotLeftOf)r;
             if(r2.getLeft() == left && r2.getRight() == right) return this;
         }
@@ -81,4 +82,6 @@ public class NotLeftOf extends Rule {
     public String toString(){
         return "!["+left+" leftof "+right+"]";
     }
+    
+    public RuleType type(){ return RuleType.NotLeftOf; }
 }

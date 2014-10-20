@@ -5,7 +5,8 @@ import garden.PieceProperty;
 import java.util.List;
 import java.util.Set;
 
-import rules.common.Rule;;
+import rules.common.Rule;
+import rules.common.RuleType;
 
 public class Not extends Rule {
     private final Rule rule;
@@ -36,4 +37,6 @@ public class Not extends Rule {
     public String toString(){
         return "![ "+rule.toString()+" ]";
     }
+    
+    public RuleType type(){ return RuleType.Not; }
 }

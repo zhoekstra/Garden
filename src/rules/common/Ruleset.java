@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
-import rules.core.BoardIsUnique;
-import rules.core.BoardIsValid;
+import rules.other.BoardIsUnique;
+import rules.other.BoardIsValid;
 
 public class Ruleset {
     private final LinkedList<Rule> rules = new LinkedList<Rule>();
@@ -64,12 +64,18 @@ public class Ruleset {
         for(Rule r : rules){
             r.updateMinumumAmountRequired(amountrequired);
         }
-        Attribute[] toiterate = {Attribute.Small, Attribute.Large,Attribute.White, Attribute.Black, Attribute.Gray,Attribute.Stone, Attribute.Plant, Attribute.Statue};
+        Attribute[][] toiterate = {{Attribute.Small, Attribute.Large},
+                                   {Attribute.White, Attribute.Black, Attribute.Gray},
+                                   {Attribute.Stone, Attribute.Plant, Attribute.Statue}};
         int piecespacesused = 0;
-        for(Attribute attr : toiterate){
-            if(amountrequired.containsKey(attr))
-                piecespacesused = Math.max(piecespacesused, amountrequired.get(attr));
+        for(Attribute[] catagory : toiterate){
+            int sum = 0;
+            for(Attribute i : catagory)
+                sum += amountrequired.containsKey(i) ? amountrequired.get(i) : 0;
+            piecespacesused = Math.max(piecespacesused, sum);
         }
+        
+        
         int emptyspacesused = amountrequired.containsKey(Attribute.Empty) ? amountrequired.get(Attribute.Empty) : 0;
         int waterspacesused = amountrequired.containsKey(Attribute.Water) ? amountrequired.get(Attribute.Water) : 0;
         if(piecespacesused + emptyspacesused + waterspacesused > RuleTree.GARDENSIZE * RuleTree.GARDENSIZE)

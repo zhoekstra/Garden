@@ -1,4 +1,4 @@
-package rules.core;
+package rules.other;
 
 import garden.Choice;
 import garden.GardenSolver;
@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import rules.common.Rule;
+import rules.common.RuleType;
 import rules.common.Ruleset;
 
 public class BoardIsUnique extends Rule {
@@ -37,4 +38,6 @@ public class BoardIsUnique extends Rule {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    public RuleType type(){ return RuleType.Other; }
 }

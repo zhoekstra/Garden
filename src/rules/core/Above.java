@@ -11,6 +11,7 @@ import java.util.EnumMap;
 import java.util.Set;
 
 import rules.common.Rule;
+import rules.common.RuleType;
 import rules.common.Ruleset;
 
 public class Above extends Rule{
@@ -101,12 +102,12 @@ public class Above extends Rule{
     }
     
     public boolean isCompatableWith(Rule r2){
-        if(r2 instanceof NotAbove){
+        if(r2.type() == RuleType.NotAbove){
             NotAbove rule = (NotAbove)r2;
             if(rule.getAbove() == above && rule.getBelow() == below) return false;
             else return true;
         }
-        else if(r2 instanceof Range){
+        else if(r2.type() == RuleType.Range){
             Range rule = (Range)r2;
             if(above == below && rule.getAttribute() == above) return rule.canBeAtLeast(2);
             else if(rule.getAttribute() == above || rule.getAttribute() == below) return rule.canBeAtLeast(1);
@@ -138,7 +139,7 @@ public class Above extends Rule{
     }
     
     public Rule reduce(Rule r){
-        if(r instanceof Above){
+        if(r.type() == RuleType.Above){
             Above r2 = (Above)r;
             if(r2.getAbove() == above && r2.getBelow() == below) return this;
         }
@@ -162,4 +163,6 @@ public class Above extends Rule{
     public String toString(){
         return "["+above+" above "+below+"]";
     }
+    
+    public RuleType type(){ return RuleType.Above; }
 }

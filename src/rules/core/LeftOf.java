@@ -11,6 +11,7 @@ import java.util.EnumMap;
 import java.util.Set;
 
 import rules.common.Rule;
+import rules.common.RuleType;
 import rules.common.Ruleset;
 
 public class LeftOf extends Rule {
@@ -102,12 +103,12 @@ public class LeftOf extends Rule {
     }
     
     public boolean isCompatableWith(Rule r2){
-        if(r2 instanceof NotLeftOf){
+        if(r2.type() == RuleType.NotLeftOf){
             NotLeftOf rule = (NotLeftOf)r2;
             if(rule.getLeft() == left && rule.getRight() == right) return false;
             else return true;
         }
-        else if(r2 instanceof Range){
+        else if(r2.type() == RuleType.Range){
             Range rule = (Range)r2;
             if(left == right && rule.getAttribute() == left) return rule.canBeAtLeast(2);
             else if(rule.getAttribute() == left || rule.getAttribute() == right) return rule.canBeAtLeast(1);
@@ -139,7 +140,7 @@ public class LeftOf extends Rule {
     }
     
     public Rule reduce(Rule r){
-        if(r instanceof LeftOf){
+        if(r.type() == RuleType.LeftOf){
             LeftOf r2 = (LeftOf)r;
             if(r2.getLeft() == left && r2.getRight() == right) return this;
         }
@@ -163,4 +164,6 @@ public class LeftOf extends Rule {
     public String toString(){
         return "["+left+" leftof "+right+"]";
     }
+    
+    public RuleType type(){ return RuleType.LeftOf; }
 }

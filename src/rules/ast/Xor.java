@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import rules.common.Rule;
+import rules.common.RuleType;
 
 public class Xor extends Rule {
     private final Rule left;
@@ -67,4 +68,6 @@ public class Xor extends Rule {
     public String toString(){
         return "[ "+left.toString()+" XOR "+right.toString()+" ]";
     }
+    
+    public RuleType type(){ return RuleType.Xor; }
 }

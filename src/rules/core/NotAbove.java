@@ -7,6 +7,7 @@ import garden.Choice;
 import garden.GardenSolver;
 import garden.PieceProperty;
 import rules.common.Rule;
+import rules.common.RuleType;
 
 public class NotAbove extends Rule {
     private final Attribute above;
@@ -41,7 +42,7 @@ public class NotAbove extends Rule {
     }
     
     public boolean isCompatableWith(Rule r2){
-        if(r2 instanceof Above){
+        if(r2.type() == RuleType.Above){
             Above rule = (Above)r2;
             if(rule.getAbove() == above && rule.getBelow() == below) return false;
             else return true;
@@ -72,7 +73,7 @@ public class NotAbove extends Rule {
     }
 
     public Rule reduce(Rule r){
-        if(r instanceof NotAbove){
+        if(r.type() == RuleType.NotAbove){
             NotAbove r2 = (NotAbove)r;
             if(r2.getAbove() == above && r2.getBelow() == below) return this;
         }
@@ -82,4 +83,6 @@ public class NotAbove extends Rule {
     public String toString(){
         return "!["+above+" above "+below+"]";
     }
+    
+    public RuleType type(){ return RuleType.NotAbove; }
 }
