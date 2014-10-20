@@ -1,19 +1,17 @@
 package main;
 
 import garden.common.Attribute;
+import garden.common.Board;
 import garden.common.PieceProperty;
 import garden.common.Position;
 
-import java.util.LinkedList;
 import java.util.Set;
 
 import rules.ast.And;
 import rules.common.InvalidRuleException;
 import rules.common.RuleTree;
-import rules.core.Above;
-import rules.core.LeftOf;
+import rules.core.NotLeftOf;
 import rules.core.Range;
-import rules.generator.RuleGenerator;
 
 public class Program {
     
@@ -79,26 +77,24 @@ public class Program {
             
             new And(
                 new And(
-                    new Range(16, Attribute.Water, 8,9,10),
-                    new Range(16, Attribute.White, 7,8,9)
+                    new Range(16, Attribute.Water, 4),
+                    new Range(16, Attribute.Empty, 12)
                     ),
-                new And(
-                    new Range(16, Attribute.Water, 10, 11, 12),
-                    new Range(16, Attribute.Gray, 1,2,3)
-                    )
+                    new NotLeftOf(Attribute.Water, Attribute.Water)
                 )
             );
-        LinkedList<Set<PieceProperty>> boards = new LinkedList<Set<PieceProperty>>();
+        //LinkedList<Set<PieceProperty>> boards = new LinkedList<Set<PieceProperty>>();
         long starttime = System.nanoTime();
         for(int i = 0; i < 2000; ++i){
-            //System.out.println(i + " =====================================================");
-            Set<PieceProperty> board = ruleset.solve();
-            if(ruleset.isValidForBoard(board)) boards.add(board);
+            System.out.println(i + " =====================================================");
+            Board board = ruleset.solve();
+            if(ruleset.isValidForBoard(board))  board.printBoard();
+            else{
+                System.out.println("no more boards found");
+                break;
+            }
         }
         long endtime = System.nanoTime();
-        for(Set<PieceProperty> i : boards){
-            printBoard(i);
-        }
         System.out.println(endtime-starttime);
     }
 }

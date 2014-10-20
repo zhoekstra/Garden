@@ -1,6 +1,7 @@
 package rules.core;
 
 import garden.common.Attribute;
+import garden.common.Board;
 import garden.common.Choice;
 import garden.common.PieceProperty;
 import garden.solver.GardenSolver;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.EnumMap;
 import java.util.LinkedList;
-import java.util.Set;
 
 import rules.common.InvalidRuleException;
 import rules.common.Rule;
@@ -106,7 +106,7 @@ public class Range extends Rule {
         return false;
     }
     
-    public boolean followsRule(Set<PieceProperty> board){
+    public boolean followsRule(Board board){
         int count = 0;
         for(PieceProperty p : board){
             if(p.getAttribute() == attribute) ++count;

@@ -1,14 +1,12 @@
 package rules.common;
 
-import garden.common.PieceProperty;
+import garden.common.Board;
 import garden.solver.GardenSolver;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import rules.ast.Not;
 import rules.ast.Xor;
@@ -20,7 +18,7 @@ public class RuleTree {
     private static final GardenSolver gardensolver = new GardenSolver(GARDENSIZE,EMPTYPREVALENCE);
     private final Rule root;
     private final List<Ruleset> representedRulesets;
-    private List<Set<PieceProperty>> generatedBoards = new ArrayList<Set<PieceProperty>>();
+    private List<Board> generatedBoards = new ArrayList<Board>();
     
     public RuleTree(Rule rootrule){
         root = rootrule;
@@ -30,7 +28,7 @@ public class RuleTree {
         }
     }
     
-    private RuleTree(List<Set<PieceProperty>> generatedboards, Rule rootrule){
+    private RuleTree(List<Board> generatedboards, Rule rootrule){
         this(rootrule);
         this.generatedBoards = generatedboards;
     }
@@ -47,20 +45,20 @@ public class RuleTree {
         return representedRulesets.size() > 0;
     }
     
-    public Set<PieceProperty> solve(){
+    public Board solve(){
         Collections.shuffle(representedRulesets);
         for(Ruleset rset : representedRulesets){
             gardensolver.reset(EMPTYPREVALENCE);
-            Set<PieceProperty> result = rset.solveRuleset(gardensolver);
-            if(result.size() > 0){
+            Board result = rset.solveRuleset(gardensolver);
+            if(!result.equals(Board.NoSolutionFound)){
                 generatedBoards.add(result);
                 return result;
             }
         }
-        return new TreeSet<PieceProperty>();
+        return Board.NoSolutionFound;
     }
     
-    public boolean isValidForBoard(Set<PieceProperty> board){
+    public boolean isValidForBoard(Board board){
         return root.followsRule(board);
     }
 }

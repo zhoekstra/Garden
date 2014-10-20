@@ -1,9 +1,8 @@
 package rules.ast;
 
-import garden.common.PieceProperty;
+import garden.common.Board;
 
 import java.util.List;
-import java.util.Set;
 
 import rules.common.Rule;
 import rules.common.RuleType;
@@ -15,7 +14,7 @@ public class Not extends Rule {
         return rule.negative().walkAndCreateRulesets();
     }
     
-    public boolean followsRule(Set<PieceProperty> board){
+    public boolean followsRule(Board board){
         return !rule.followsRule(board); 
     }
 

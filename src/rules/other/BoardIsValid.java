@@ -1,13 +1,12 @@
 package rules.other;
 
+import garden.common.Board;
 import garden.common.Choice;
-import garden.common.PieceProperty;
 import garden.common.Position;
 import garden.solver.GardenSolver;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Set;
 
 import rules.common.Rule;
 import rules.common.RuleType;
@@ -38,7 +37,7 @@ public class BoardIsValid extends Rule {
         return myruleset.recurse(gs);
     }
     
-    public boolean followsRule(Set<PieceProperty> board){
+    public boolean followsRule(Board board){
         return false;
     }
     @Override

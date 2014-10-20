@@ -1,17 +1,15 @@
 package rules.common;
 
 import garden.common.Attribute;
-import garden.common.PieceProperty;
+import garden.common.Board;
 import garden.solver.GardenSolver;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Set;
 
 import rules.other.BoardIsUnique;
 import rules.other.BoardIsValid;
@@ -41,7 +39,7 @@ public class Ruleset {
         this.rules.add(new BoardIsValid());
     }
     
-    public Ruleset(Collection<Set<PieceProperty>> existingBoards, Rule... rules) {
+    public Ruleset(Collection<Board> existingBoards, Rule... rules) {
         this(rules);
         // tack on an additional rule- boards must be unique
         this.rules.add(new BoardIsUnique(existingBoards));
@@ -84,12 +82,12 @@ public class Ruleset {
             return true;
     }
 
-    public Set<PieceProperty> solveRuleset(GardenSolver gs){
+    public Board solveRuleset(GardenSolver gs){
         for(Rule rule : rules){
             rule.applyRestrictions(gs);
         }
-        if(!recurse(gs)) return new HashSet<PieceProperty>();
-        else return gs.getAllChosenProperties();
+        if(!recurse(gs)) return Board.NoSolutionFound;
+        else return new Board(gs.getAllChosenProperties());
     }
 
     public boolean recurse(GardenSolver gs) {

@@ -21,6 +21,14 @@ public class PieceProperty implements Comparable<PieceProperty> {
         return comppos == 0 ? attribute.compareTo(o.attribute) : comppos;
     }
     
+    public boolean equals(Object o){
+        if(o instanceof PieceProperty){
+            PieceProperty p = (PieceProperty)o;
+            return (p.position == position && p.attribute == attribute);
+        }
+        else return false;
+    }
+    
     @Override
     public String toString(){
         return String.format("[%s at %s]", getAttribute().toString(), getPosition().toString());

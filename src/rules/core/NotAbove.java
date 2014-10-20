@@ -1,8 +1,7 @@
 package rules.core;
 
-import java.util.Set;
-
 import garden.common.Attribute;
+import garden.common.Board;
 import garden.common.Choice;
 import garden.common.PieceProperty;
 import garden.solver.GardenSolver;
@@ -30,7 +29,7 @@ public class NotAbove extends Rule {
         }
     }
     
-    public boolean followsRule(Set<PieceProperty> board){
+    public boolean followsRule(Board board){
         for(PieceProperty pabove : board){
             if(pabove.getAttribute() == above){
                 for(PieceProperty pbelow : board){

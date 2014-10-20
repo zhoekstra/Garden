@@ -1,14 +1,13 @@
 package rules.core;
 
-import java.util.Set;
-
-import rules.common.Rule;
-import rules.common.RuleType;
 import garden.common.Attribute;
+import garden.common.Board;
 import garden.common.Choice;
 import garden.common.PieceProperty;
 import garden.common.Position;
 import garden.solver.GardenSolver;
+import rules.common.Rule;
+import rules.common.RuleType;
 
 public class NotAdjacent extends Rule {
     private final Attribute first;
@@ -38,7 +37,7 @@ public class NotAdjacent extends Rule {
         return (Math.abs(a.x() - b.x()) <= 1 && Math.abs(a.y() - b.y()) <= 1);
     }
     
-    public boolean followsRule(Set<PieceProperty> board){
+    public boolean followsRule(Board board){
         for(PieceProperty pfirst : board){
             if(pfirst.getAttribute() == first){
                 for(PieceProperty psecond : board){

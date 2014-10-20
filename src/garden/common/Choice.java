@@ -196,7 +196,7 @@ public class Choice implements Comparable<Choice> {
      */
     private void relink() {
         this.getRight().setLeft(this);
-        this.getLeft().setRight(_right);
+        this.getLeft().setRight(this);
     }
 
     /**

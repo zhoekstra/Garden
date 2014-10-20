@@ -1,10 +1,9 @@
 package rules.ast;
 
-import garden.common.PieceProperty;
+import garden.common.Board;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import rules.common.Rule;
 import rules.common.RuleType;
@@ -25,7 +24,7 @@ public class And extends Rule {
         return toreturn;
     }
     
-    public boolean followsRule(Set<PieceProperty> board){
+    public boolean followsRule(Board board){
         return left.followsRule(board) && right.followsRule(board); 
     }
 

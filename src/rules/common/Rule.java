@@ -1,14 +1,13 @@
 package rules.common;
 
 import garden.common.Attribute;
-import garden.common.PieceProperty;
+import garden.common.Board;
 import garden.solver.GardenSolver;
 
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public abstract class Rule {
     /**
@@ -38,7 +37,7 @@ public abstract class Rule {
      * @param generatedBoards
      * @return
      */
-    public final List<Ruleset> walkRulesets(List<Set<PieceProperty>> generatedBoards){
+    public final List<Ruleset> walkRulesets(List<Board> generatedBoards){
         List<Ruleset> toreturn = new LinkedList<Ruleset>();
         List<List<Rule>> result = this.walkAndCreateRulesets();
         Rule[] toarrayidentifier = new Rule[0];
@@ -57,7 +56,7 @@ public abstract class Rule {
         return Arrays.asList( Arrays.asList(this));
     }
     
-    public abstract boolean followsRule(Set<PieceProperty> board);
+    public abstract boolean followsRule(Board board);
 
     /**
      * Non-Optional method
