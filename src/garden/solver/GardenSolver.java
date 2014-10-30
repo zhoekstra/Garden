@@ -159,7 +159,9 @@ public class GardenSolver implements Iterable<Choice>{
         // reshuffle and reset our circular linked list
         shuffle(empty_prevalence_perc);
     }
-
+    public boolean fullyCovered(){
+        return _root.getRight() == _root;
+    }
     public Choice getChoice(int x, int y, Attribute a) {
         return getChoice(new Position(x, y), a);
     }

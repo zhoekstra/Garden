@@ -94,15 +94,18 @@ public class Range extends Rule {
                 return false;
             }
         }
-        
+        LinkedList<Choice> already_tried = new LinkedList<Choice>();
         for(Choice c : gs){
             if(c.getAttribute() == attribute){
                 c.choose();
                 if(pickNElementsFromListAndRecurse(elementsRemaining-1, gs, myruleset)) return true;
                 c.open();
+                // we already tried this node, so just close it and prevent others from trying it as well.
+                c.close();
+                already_tried.addFirst(c);
             }
         }
-        
+        for(Choice c : already_tried) c.open();
         return false;
     }
     

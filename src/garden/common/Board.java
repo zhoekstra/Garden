@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import properties.Properties;
+
 public class Board implements Iterable<PieceProperty> {
     public static final Board NoSolutionFound = new Board();
     
@@ -47,7 +49,7 @@ public class Board implements Iterable<PieceProperty> {
         printBoard(System.out);
     }
     public void printBoard(PrintStream stream){
-        String[][][] printboard = new String[4][4][3];
+        String[][][] printboard = new String[Properties.GARDENSIZE][Properties.GARDENSIZE][3];
         
         for(PieceProperty p : choices){
             Position pos = p.getPosition();
@@ -91,16 +93,23 @@ public class Board implements Iterable<PieceProperty> {
             }
         }
         
-        for(int y = 0; y < 4; ++y){
-            stream.println("+-----+-----+-----+-----+");
+        for(int y = 0; y < Properties.GARDENSIZE; ++y){
+            stream.println(dividerString());
             for(int subsquare = 0; subsquare < 3; ++subsquare){
-                for(int x = 0; x < 4; ++x){
+                for(int x = 0; x < Properties.GARDENSIZE; ++x){
                     stream.print("|"+printboard[x][y][subsquare]);
                 }
                 stream.println("|");
             }
         }
-        stream.println("+-----+-----+-----+-----+");
+        stream.println(dividerString());
+    }
+    private String dividerString(){
+        StringBuilder toreturn = new StringBuilder();
+        for(int i = 0; i < Properties.GARDENSIZE; ++i)
+            toreturn.append("+-----");
+        toreturn.append("+");
+        return toreturn.toString();
     }
     @Override
     public Iterator<PieceProperty> iterator() {

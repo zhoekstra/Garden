@@ -8,14 +8,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import properties.Properties;
 import rules.ast.Not;
 import rules.ast.Xor;
 
 public class RuleTree {
-    public static final int GARDENSIZE = 4;
-    public static final double EMPTYPREVALENCE = 0.15;
-    
-    private static final GardenSolver gardensolver = new GardenSolver(GARDENSIZE,EMPTYPREVALENCE);
+    private static final GardenSolver gardensolver = new GardenSolver(Properties.GARDENSIZE,Properties.EMPTYPREVALENCE);
     private final Rule root;
     private final List<Ruleset> representedRulesets;
     private List<Board> generatedBoards = new ArrayList<Board>();
@@ -48,7 +46,7 @@ public class RuleTree {
     public Board solve(){
         Collections.shuffle(representedRulesets);
         for(Ruleset rset : representedRulesets){
-            gardensolver.reset(EMPTYPREVALENCE);
+            gardensolver.reset(Properties.EMPTYPREVALENCE);
             Board result = rset.solveRuleset(gardensolver);
             if(!result.equals(Board.NoSolutionFound)){
                 generatedBoards.add(result);

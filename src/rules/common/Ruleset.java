@@ -11,6 +11,7 @@ import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import properties.Properties;
 import rules.other.BoardIsUnique;
 import rules.other.BoardIsValid;
 
@@ -76,7 +77,7 @@ public class Ruleset {
         
         int emptyspacesused = amountrequired.containsKey(Attribute.Empty) ? amountrequired.get(Attribute.Empty) : 0;
         int waterspacesused = amountrequired.containsKey(Attribute.Water) ? amountrequired.get(Attribute.Water) : 0;
-        if(piecespacesused + emptyspacesused + waterspacesused > RuleTree.GARDENSIZE * RuleTree.GARDENSIZE)
+        if(piecespacesused + emptyspacesused + waterspacesused > Properties.GARDENSIZE * Properties.GARDENSIZE)
             return false;
         else
             return true;
