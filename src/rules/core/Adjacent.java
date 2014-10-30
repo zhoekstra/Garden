@@ -2,9 +2,9 @@ package rules.core;
 
 import garden.common.Attribute;
 import garden.common.Board;
-import garden.common.Choice;
 import garden.common.PieceProperty;
 import garden.common.Position;
+import garden.solver.Choice;
 import garden.solver.GardenSolver;
 
 import java.util.ArrayList;

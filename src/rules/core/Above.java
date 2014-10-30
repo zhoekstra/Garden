@@ -2,14 +2,15 @@ package rules.core;
 
 import garden.common.Attribute;
 import garden.common.Board;
-import garden.common.Choice;
 import garden.common.PieceProperty;
 import garden.common.Position;
+import garden.solver.Choice;
 import garden.solver.GardenSolver;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 
+import properties.Properties;
 import rules.common.Rule;
 import rules.common.RuleType;
 import rules.common.Ruleset;
@@ -27,7 +28,7 @@ public class Above extends Rule{
                 Choice belowChoice = gs.getChoice(position, below);
                 
                 // add aboveChoice to our possible list of aboves only if it could have a piece below it.
-                if(aboveChoice.isChosen() && aboveChoice.getPosition().y() != gs.getSize() - 1){
+                if(aboveChoice.isChosen() && aboveChoice.getPosition().y() != Properties.GARDENSIZE - 1){
                     abovesAlreadyChosen.add(aboveChoice);
                 }
                 // add belowChoice to our possible list of belows only if it could have a piece above it.
@@ -70,7 +71,7 @@ public class Above extends Rule{
         
         // if we can't find a single node that covers our problem, we need to try and find both an above and below choice
         for(Choice abovechoice : gs){
-            if((abovechoice.getAttribute() == above) && (abovechoice.getPosition().y() != gs.getSize() - 1)){
+            if((abovechoice.getAttribute() == above) && (abovechoice.getPosition().y() != Properties.GARDENSIZE - 1)){
                 abovechoice.choose();
                 
                 for(Choice belowchoice : gs){

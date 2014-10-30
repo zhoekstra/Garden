@@ -2,14 +2,15 @@ package rules.core;
 
 import garden.common.Attribute;
 import garden.common.Board;
-import garden.common.Choice;
 import garden.common.PieceProperty;
 import garden.common.Position;
+import garden.solver.Choice;
 import garden.solver.GardenSolver;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 
+import properties.Properties;
 import rules.common.Rule;
 import rules.common.RuleType;
 import rules.common.Ruleset;
@@ -27,7 +28,7 @@ public class LeftOf extends Rule {
                 Choice rightChoice = gs.getChoice(position, right);
                 
                 // add leftChoice to our possible list of aboves only if it could have a piece to the right of it.
-                if(leftChoice.isChosen() && leftChoice.getPosition().x() != gs.getSize() - 1){
+                if(leftChoice.isChosen() && leftChoice.getPosition().x() != Properties.GARDENSIZE - 1){
                     leftsAlreadyChosen.add(leftChoice);
                 }
                 // add rightChoice to our possible list of belows only if it could have a piece to the left of it.
@@ -70,7 +71,7 @@ public class LeftOf extends Rule {
         
         // if we can't find a single node that covers our problem, we need to try and find both a left and right choice
         for(Choice leftchoice : gs){
-            if((leftchoice.getAttribute() == left) && (leftchoice.getPosition().x() != gs.getSize() - 1)){
+            if((leftchoice.getAttribute() == left) && (leftchoice.getPosition().x() != Properties.GARDENSIZE - 1)){
                 leftchoice.choose();
                 
                 for(Choice rightchoice : gs){

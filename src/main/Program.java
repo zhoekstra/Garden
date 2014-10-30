@@ -11,13 +11,10 @@ import rules.core.Range;
 public class Program {
     public static void main(String[] args) throws InvalidRuleException{
         RuleTree ruleset = new RuleTree(
-            new And(
                 new And(
                     new Range(16, Attribute.Water, 4),
                     new Range(16, Attribute.Empty, 12)
-                    ),
-                    new NotLeftOf(Attribute.Water, Attribute.Water)
-                )
+                    )
             );
         long starttime = System.nanoTime();
         for(int i = 0; i < 2000; ++i){

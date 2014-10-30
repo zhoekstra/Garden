@@ -1,10 +1,11 @@
 package rules.core;
 
+import properties.Properties;
 import garden.common.Attribute;
 import garden.common.Board;
-import garden.common.Choice;
 import garden.common.PieceProperty;
 import garden.common.Position;
+import garden.solver.Choice;
 import garden.solver.GardenSolver;
 import rules.common.Rule;
 import rules.common.RuleType;
@@ -15,8 +16,8 @@ public class NotAdjacent extends Rule {
     
     @Override
     public void applyRestrictions(GardenSolver gs) {
-        for(int x = 0; x < gs.getSize(); ++x){
-            for(int y = 0; y < gs.getSize(); ++y){
+        for(int x = 0; x < Properties.GARDENSIZE; ++x){
+            for(int y = 0; y < Properties.GARDENSIZE; ++y){
                 Choice pos = gs.getChoice(x, y, first);
                 int[] arr  = new int[] {-1,0,1};
                 for(int xmod : arr){

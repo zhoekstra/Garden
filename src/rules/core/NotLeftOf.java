@@ -1,9 +1,10 @@
 package rules.core;
 
+import properties.Properties;
 import garden.common.Attribute;
 import garden.common.Board;
-import garden.common.Choice;
 import garden.common.PieceProperty;
+import garden.solver.Choice;
 import garden.solver.GardenSolver;
 import rules.common.Rule;
 import rules.common.RuleType;
@@ -14,13 +15,13 @@ public class NotLeftOf extends Rule {
     
     @Override
     public void applyRestrictions(GardenSolver gs) {
-        for(int x = 0; x < gs.getSize(); ++x){
-            for(int y = 0; y < gs.getSize(); ++y){
+        for(int x = 0; x < Properties.GARDENSIZE; ++x){
+            for(int y = 0; y < Properties.GARDENSIZE; ++y){
                 
                 Choice aboveChoice = gs.getChoice(x,y,left);
                 
-                for(int x2 = x+1; x2 < gs.getSize(); ++x2){
-                    for(int y2 = 0; y2 < gs.getSize(); ++y2){
+                for(int x2 = x+1; x2 < Properties.GARDENSIZE; ++x2){
+                    for(int y2 = 0; y2 < Properties.GARDENSIZE; ++y2){
                         Choice belowChoice = gs.getChoice(x2, y2, right);
                         if(belowChoice != null) Choice.linkExclusiveChoices(aboveChoice,  belowChoice);
                     }

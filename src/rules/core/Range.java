@@ -2,8 +2,8 @@ package rules.core;
 
 import garden.common.Attribute;
 import garden.common.Board;
-import garden.common.Choice;
 import garden.common.PieceProperty;
+import garden.solver.Choice;
 import garden.solver.GardenSolver;
 
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import java.util.BitSet;
 import java.util.EnumMap;
 import java.util.LinkedList;
 
+import properties.Properties;
 import rules.common.InvalidRuleException;
 import rules.common.Rule;
 import rules.common.RuleType;
@@ -36,8 +37,8 @@ public class Range extends Rule {
         for(Choice choice : gs){
             if(choice.getAttribute() == attribute) open.add(choice);
         }
-        for(int x = 0; x < gs.getSize(); ++x){
-            for(int y = 0; y< gs.getSize(); ++y){
+        for(int x = 0; x < Properties.GARDENSIZE; ++x){
+            for(int y = 0; y< Properties.GARDENSIZE; ++y){
                 Choice c = gs.getChoice(x, y, attribute);
                 if(c.isChosen())
                     chosenAlready.add(c);
@@ -64,7 +65,7 @@ public class Range extends Rule {
         }
         
         // else go through the list and grab the appropriate number of elements.
-        for(int numElementsToPick = chosenAlready.size() + 1; numElementsToPick <= gs.getSize() * gs.getSize(); ++numElementsToPick){
+        for(int numElementsToPick = chosenAlready.size() + 1; numElementsToPick <= Properties.GARDENSIZE * Properties.GARDENSIZE; ++numElementsToPick){
             if(validValues.get(numElementsToPick)){
                 int elementsRemainingToPick = numElementsToPick - chosenAlready.size();
                 
@@ -94,7 +95,7 @@ public class Range extends Rule {
                 return false;
             }
         }
-        LinkedList<Choice> already_tried = new LinkedList<Choice>();
+        LinkedList<Choice> alreadyTried = new LinkedList<Choice>();
         for(Choice c : gs){
             if(c.getAttribute() == attribute){
                 c.choose();
@@ -102,10 +103,10 @@ public class Range extends Rule {
                 c.open();
                 // we already tried this node, so just close it and prevent others from trying it as well.
                 c.close();
-                already_tried.addFirst(c);
+                alreadyTried.addFirst(c);
             }
         }
-        for(Choice c : already_tried) c.open();
+        for(Choice c : alreadyTried) c.open();
         return false;
     }
     

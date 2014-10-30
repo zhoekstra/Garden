@@ -1,7 +1,6 @@
 package garden.solver;
 
 import garden.common.Attribute;
-import garden.common.Choice;
 import garden.common.PieceProperty;
 import garden.common.Position;
 
@@ -16,6 +15,14 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 
+import properties.Properties;
+
+/**
+ * GardenSolver
+ * @author hoekstrz
+ * A list of Choices linked together as a circular linked list, that can be manipulated to solve a Board given a set of rules.
+ * The processes to manipulate this exists in the rules, which are called by RuleTree.
+ */
 public class GardenSolver implements Iterable<Choice>{
     /**
      * the root of our circular linked list. This is the only Choice that is
@@ -29,31 +36,15 @@ public class GardenSolver implements Iterable<Choice>{
      * to modify
      */
     private final HashMap<Position, EnumMap<Attribute, Choice>> _choiceTable = new HashMap<Position, EnumMap<Attribute, Choice>>();
-    /**
-     * The size of this Garden
-     */
-    private final int size;
 
     /**
-     * Create a default 4x4 garden with approximately 2/3 of the free spaces
-     * after generation being empty.
+     * Constructor
+     * Creates a gardensolver that solves for boards of the size specified in Properties.GARDENSIZE.
+     * All choices start Open and shuffled, so that iterating through them is done in a deterministic, but initially random order.
      */
     public GardenSolver() {
-        this(4, 0.15);
-    }
-
-    /**
-     * 
-     * @param height
-     * @param width
-     * @param empty_prevalence_perc
-     */
-    public GardenSolver(int size, double empty_prevalence_perc) {
-        if (size < 1)
-            size = 1;
-        this.size = size;
-        for (int y = 0; y < size; ++y) {
-            for (int x = 0; x < size; ++x) {
+        for (int y = 0; y < Properties.GARDENSIZE; ++y) {
+            for (int x = 0; x < Properties.GARDENSIZE; ++x) {
                 Position pos = new Position(x, y);
                 // we use this temp array so we can easily link things together
                 // later
@@ -122,21 +113,17 @@ public class GardenSolver implements Iterable<Choice>{
 
         // shuffle the elements in the tables we added. Coincidentally, this
         // also adds them to _root.
-        shuffle(empty_prevalence_perc);
+        shuffle(Properties.EMPTYPREVALENCE);
 
         // lock our choices. If we ever need to reset our graph, we can avoid
         // having to create everything again.
         for (Choice c = _root.getRight(); c != _root; c = c.getRight())
             c.lockBasicExclusiveChoices();
     }
-    public List<Choice> basicSolve(){
-        LinkedList<Choice> solution = new LinkedList<Choice>();
-        while(_root.getRight() != _root){
-            solution.add(_root.getRight());
-            _root.getRight().choose();
-        }
-        return solution;
-    }
+    /**
+     * 
+     * @return a set of choices that have been Chosen so far, including information about the state of each Choice.
+     */
     public Set<Choice> choicesMade(){
         Set<Choice> toreturn = new TreeSet<Choice>();
         // if the garden is not completely solved, return an empty set.
@@ -149,6 +136,23 @@ public class GardenSolver implements Iterable<Choice>{
         return toreturn;
         
     }
+    /**
+     * 
+     * @return a set of choices that have been Chosen so far, without information about the state of each choice.
+     */
+    public Set<PieceProperty> getAllChosenProperties(){
+        Set<PieceProperty> toreturn = new TreeSet<PieceProperty>();
+        for(EnumMap<Attribute, Choice> map : _choiceTable.values()){
+            for(Choice c : map.values()){
+                if(c.isChosen()) toreturn.add(new PieceProperty(c.getPosition(), c.getAttribute()));
+            }
+        }
+        return toreturn;
+    }
+    /**
+     * Open all Choices and shuffle them, created a fresh new GardenSolver.
+     * @param empty_prevalence_perc the rate at which Empty choices are concentrated towards the front of our random shuffle. A value of .15 means that all Empty chocies will be shuffled into the first 15% of the list.
+     */
     public void reset(double empty_prevalence_perc) {
         // remove any additional choice exclusions rules may have applied
         for (Map<Attribute, Choice> posmap : _choiceTable.values()) {
@@ -159,31 +163,40 @@ public class GardenSolver implements Iterable<Choice>{
         // reshuffle and reset our circular linked list
         shuffle(empty_prevalence_perc);
     }
+    /**
+     * Check to make sure that all choices have either been Chosen or Closed.
+     * @return true of no choices are Open, false otherwise.
+     */
     public boolean fullyCovered(){
         return _root.getRight() == _root;
     }
+    /**
+     * Get the choice that represents a specific position and Attribute.
+     * @param x the x value of the position
+     * @param y the y value of the position
+     * @param a The attribute
+     * @return The Choice that represents the specified Position and Attribute
+     */
     public Choice getChoice(int x, int y, Attribute a) {
         return getChoice(new Position(x, y), a);
     }
-
+    /**
+     * Get the choice that represents a specific position and Attribute.
+     * @param pos the position
+     * @param a the attribute
+     * @return The Choice that represents the specified Position and Attribute
+     */
     public Choice getChoice(Position pos, Attribute a) {
         if(!_choiceTable.containsKey(pos)) return null;
         return _choiceTable.get(pos).get(a);
     }
-    
+    /**
+     * Get all Positions represented by this GardenSolver
+     * @return the set of all Positions in the Solver.
+     */
     public Set<Position> getPositions(){
         return _choiceTable.keySet();
     }
-    public Set<PieceProperty> getAllChosenProperties(){
-        Set<PieceProperty> toreturn = new TreeSet<PieceProperty>();
-        for(EnumMap<Attribute, Choice> map : _choiceTable.values()){
-            for(Choice c : map.values()){
-                if(c.isChosen()) toreturn.add(new PieceProperty(c.getPosition(), c.getAttribute()));
-            }
-        }
-        return toreturn;
-    }
-
     private void shuffle(double empty_prevalence_perc) {
         // as 10% of our values will always be Empty's, empty_prevalence_perc
         // can't go below %10.
@@ -236,11 +249,20 @@ public class GardenSolver implements Iterable<Choice>{
         for (Choice c : temp_choices)
             _root.addChoice(c);
     }
-
+    /**
+     * 
+     * @param x
+     * @param y
+     * @return
+     */
     public boolean CanStillBeValid(int x, int y) {
         return CanStillBeValid(new Position(x, y));
     }
-
+    /**
+     * 
+     * @param p
+     * @return
+     */
     public boolean CanStillBeValid(Position p) {
         EnumMap<Attribute, Choice> pos = _choiceTable.get(p);
 
@@ -302,13 +324,5 @@ public class GardenSolver implements Iterable<Choice>{
             current = current.getRight();
             return toreturn;
         }
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public int getSize() {
-        return size;
     }
 }

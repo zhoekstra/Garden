@@ -1,6 +1,12 @@
 package garden.common;
 
-
+/**
+ * PieceProperty
+ * @author hoekstrz
+ * One particular property of a pieceon the board. This PieceProperty may represent only a part of the actual "piece"
+ * for example, a single piece could be represented by three pieceproperties - one that defines it's size, one that defines it's 
+ * shape,a dn one that defines it's colors.
+ */
 public class PieceProperty implements Comparable<PieceProperty> {
     public final Position position;
     public final Attribute attribute;

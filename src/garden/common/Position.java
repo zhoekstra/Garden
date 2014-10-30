@@ -1,5 +1,10 @@
 package garden.common;
 
+/**
+ * Position
+ * @author hoekstrz
+ * an x/y position on a board.  
+ */
 public class Position implements Comparable<Position> {
     private final int x;
     private final int y;

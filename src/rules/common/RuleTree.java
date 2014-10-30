@@ -13,7 +13,7 @@ import rules.ast.Not;
 import rules.ast.Xor;
 
 public class RuleTree {
-    private static final GardenSolver gardensolver = new GardenSolver(Properties.GARDENSIZE,Properties.EMPTYPREVALENCE);
+    private static final GardenSolver gardensolver = new GardenSolver();
     private final Rule root;
     private final List<Ruleset> representedRulesets;
     private List<Board> generatedBoards = new ArrayList<Board>();

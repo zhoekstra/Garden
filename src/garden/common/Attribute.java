@@ -1,5 +1,10 @@
 package garden.common;
-
+/**
+ * Attribute
+ * @author hoekstrz
+ * This enum represents the various attributes that pieces on a board can have.
+ * Some attributes are mutually exclusive with others. 
+ */
 public enum Attribute {
     // this piece has no Attributes. Mutually exclusive with every other
     // attribute

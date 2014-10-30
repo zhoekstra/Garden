@@ -1,9 +1,21 @@
-package garden.common;
+package garden.solver;
+
+import garden.common.Attribute;
+import garden.common.PieceProperty;
+import garden.common.Position;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Choice
+ * @author hoekstrz
+ * a Choice is a node in a GardenSolver. It represents a particular PieceProperty, it's relationship to other PieceProperties,
+ * and it's order in the gardenSolver.
+ * 
+ * A Choice is, in addition to keeping data about the choice to be made, a node in a circular-doubly-linked list.
+ */
 public class Choice implements Comparable<Choice> {
     private final PieceProperty _property;
 
@@ -276,18 +288,31 @@ public class Choice implements Comparable<Choice> {
     public Status getStatus() {
         return _status;
     }
-
+    /**
+     * Check to see if this choice has been closed
+     * @return
+     */
     public boolean isClosed() {
         return _status == Status.Closed;
     }
-
+    /**
+     * Check to see if this choice has been Chosen
+     * @return
+     */
     public boolean isChosen() {
         return _status == Status.Chosen;
     }
-
+    /**
+     * Check to see if this choice is Open
+     * @return
+     */
     public boolean isOpen() {
         return _status == Status.Open;
     }
+    /**
+     * Check to see if this choice is available to be Chosen
+     * @return
+     */
     public boolean isClosedOrChosen(){
         return _status == Status.Closed || _status == Status.Chosen;
     }
@@ -296,7 +321,7 @@ public class Choice implements Comparable<Choice> {
     public String toString(){
         return String.format("[%s at %s]", getAttribute().toString(), getPosition().toString());
     }
-
+    
     public PieceProperty getProperty() {
         return _property;
     }
