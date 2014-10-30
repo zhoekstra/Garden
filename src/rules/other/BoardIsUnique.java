@@ -1,12 +1,9 @@
 package rules.other;
 
 import garden.common.Board;
-import garden.common.Choice;
-import garden.common.PieceProperty;
 import garden.solver.GardenSolver;
 
 import java.util.Collection;
-import java.util.Set;
 
 import rules.common.Rule;
 import rules.common.RuleType;
