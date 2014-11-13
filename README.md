@@ -172,17 +172,17 @@ The following is a list of example rules and a board that follows the specified 
 PROGRESS AND CHECKLIST
 ======
 API DONE
-Given a rule, the Master can generate a valid rock garden
-Given a rule, the master can generate an invalid Rock garden
-Given two rules (the Masters rule and the Student's guess), the master can generate a garden that is valid for one, but not the other.
-Gardens generated are unique and non-deterministic (When asked to create gardens, the Master will never create a garden that already exists and the garden will be random)
-Gardens generated are pretty (The master will make sure there aren't too many complicated features and leaves most spaces Empty)
+* Given a rule, the Master can generate a valid rock garden
+* Given a rule, the master can generate an invalid Rock garden
+* Given two rules (the Masters rule and the Student's guess), the master can generate a garden that is valid for one, but not the other.
+* Gardens generated are unique and non-deterministic (When asked to create gardens, the Master will never create a garden that already exists and the garden will be random)
+* Gardens generated are pretty (The master will make sure there aren't too many complicated features and leaves most spaces Empty)
 
 API TODO
-The Master needs to be able to generate a random Rule that roughly matches a designated difficulty
+* The Master needs to be able to generate a random Rule that roughly matches a designated difficulty
 
 GUI AND GAME LOGIC TODO
-Basically everything (Algorithms are easy - first time game coding is hard)
-Port rule generation code from Java to Android.
-Create GUI interface to create and judge rock gardens and scroll through judged gardens.
-Create GUI interface to create Rules so the Student can guess the Master's rule.
+* Basically everything (Algorithms are easy - first time game coding is hard)
+* Port rule generation code from Java to Android.
+* Create GUI interface to create and judge rock gardens and scroll through judged gardens.
+* Create GUI interface to create Rules so the Student can guess the Master's rule.
