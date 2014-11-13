@@ -27,14 +27,10 @@ GARDEN MAKEUP
 A rock garden is represented by a square 4x4 board. Each square must be populated by exactly one of the following:
 
 * A Feature with 3 properties;
-    A type that may be a Buddha Statue, a Plant, or a Rock
-
-    A size that may be Large or Small
-    
-    A color that may be Black, White, or Grey
-    
+  * A type that may be a Buddha Statue, a Plant, or a Rock
+  * A size that may be Large or Small
+  * A color that may be Black, White, or Grey
 * A Pond with the Water property.
-
 * An Empty Square with the Empty property.
 
 Some example boards in ASCII format are below:
