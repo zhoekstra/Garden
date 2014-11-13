@@ -27,15 +27,18 @@ GARDEN MAKEUP
 A rock garden is represented by a square 4x4 board. Each square must be populated by exactly one of the following:
 
 * A Feature with 3 properties;
-    > A type that may be a Buddha Statue, a Plant, or a Rock
-    > A size that may be Large or Small
-    > A color that may be Black, White, or Grey
+    A type that may be a Buddha Statue, a Plant, or a Rock
+
+    A size that may be Large or Small
+    
+    A color that may be Black, White, or Grey
     
 * A Pond with the Water property.
 
 * An Empty Square with the Empty property.
 
 Some example boards in ASCII format are below:
+```
 +-----+-----+-----+-----+
 |Large|     |Small|Small|
 |White|     |Gray |White|
@@ -71,7 +74,7 @@ Some example boards in ASCII format are below:
 |Water|White|Black|     |
 |     |Plant|Budha|     |
 +-----+-----+-----+-----+
-
+```
 
 RULES
 ======
@@ -126,6 +129,7 @@ EXAMPLE RULES
 The following is a list of example rules and a board that follows the specified rule.
 
 (exactly 1 Water) and (Black leftof Grey)
+```
 +-----+-----+-----+-----+
 |     |     |     |Large|
 |     |     |     |Gray |
@@ -143,8 +147,9 @@ The following is a list of example rules and a board that follows the specified 
 |White|     |     |     |
 |Plant|     |     |     |
 +-----+-----+-----+-----+
-
+```
 (Black leftof Grey) xor (Water above Grey)
+```
 +-----+-----+-----+-----+
 |     |Large|Small|     |
 |     |Gray |Black|     |
@@ -162,7 +167,7 @@ The following is a list of example rules and a board that follows the specified 
 |     |     |Gray |     |
 |     |     |Budha|     |
 +-----+-----+-----+-----+
-
+```
 
 PROGRESS AND CHECKLIST
 ======
