@@ -2,11 +2,12 @@ Karensansui
 ======
 
 Karensansui is an inductive logic game for one human player, known as the "Student" and an AI known as the "Master".
-======
+
 The following is an overview of the rules of the game. For anyone interested in understanding the algorithms behind the game, read the quick synopsis below
 and then open the file "AlgorithmExplanations.txt"
-======
+
 OVERVIEW
+======
 In Karensansui, the Students job is to find out by what rule the Master judges the rock gardens created for the temple. To do this, the Student creates
 rock gardens filled with different features. He then submits it to the Master along with a guess as to what the Master will mark it as. The Master judges
 the garden by her secret rule and marks the new rock garden with a black or white flag, with the white flag designating that the garden follows her rule,
@@ -20,9 +21,9 @@ Either a garden that his guess says should be marked white but is marked black, 
 
 If the Master cannot create a garden that contradicts the Students rule, he has won the game and guessed the Master's rule.
 
-======
-GARDEN MAKEUP
 
+GARDEN MAKEUP
+======
 A rock garden is represented by a square 4x4 board. Each square must be populated by exactly one of the following:
 
 * A Feature with 3 properties;
@@ -71,9 +72,9 @@ Some example boards in ASCII format are below:
 |     |Plant|Budha|     |
 +-----+-----+-----+-----+
 
-======
-RULES
 
+RULES
+======
 A Property is defined as one of the properties carried by a square in a rock garden. (Buddha, Plant, Stone, Small, Large, White, Black, Grey, Pond, Empty)
 
 The following are rules that may be used by the Master and guessed by the student:
@@ -119,8 +120,9 @@ The following are rules that may be used by the Master and guessed by the studen
 * Rule xor Rule
     > this rule returns true if and only one of the Rules specified returns true and one of the Rules specified returns false (it doesn't matter which)
     
-======
+
 EXAMPLE RULES
+======
 The following is a list of example rules and a board that follows the specified rule.
 
 (exactly 1 Water) and (Black leftof Grey)
@@ -161,9 +163,9 @@ The following is a list of example rules and a board that follows the specified 
 |     |     |Budha|     |
 +-----+-----+-----+-----+
 
-======
-PROGRESS AND CHECKLIST
 
+PROGRESS AND CHECKLIST
+======
 API DONE
 Given a rule, the Master can generate a valid rock garden
 Given a rule, the master can generate an invalid Rock garden
