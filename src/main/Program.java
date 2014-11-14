@@ -10,6 +10,7 @@ import rules.core.Range;
 
 public class Program {
     public static void main(String[] args) throws InvalidRuleException{
+        // this is an example restrictive ruleset.
         RuleTree ruleset = new RuleTree(
                 new And(
                     new Range(16, Attribute.Water, 4),
@@ -17,6 +18,9 @@ public class Program {
                     )
             );
         long starttime = System.nanoTime();
+        // Solve for all instances of the board. According to combinatorics, there should be exactly 1820 possible boards.
+        // this for loop should print out all 1820 boards in a random order, then report no other possible boards.
+        // this generally takes about 3 seconds on my home machine
         for(int i = 0; i < 2000; ++i){
             System.out.println(i + " =====================================================");
             Board board = ruleset.solve();
