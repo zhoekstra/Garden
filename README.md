@@ -2,11 +2,12 @@ Karensansui
 ======
 
 Karensansui is an inductive logic game for one human player, known as the "Student" and an AI known as the "Master".
-======
+
 The following is an overview of the rules of the game. For anyone interested in understanding the algorithms behind the game, read the quick synopsis below
-and then open the file "AlgorithmExplanations.txt"
-======
+and then open the file "AlgorithmExplanations.md"
+
 OVERVIEW
+======
 In Karensansui, the Students job is to find out by what rule the Master judges the rock gardens created for the temple. To do this, the Student creates
 rock gardens filled with different features. He then submits it to the Master along with a guess as to what the Master will mark it as. The Master judges
 the garden by her secret rule and marks the new rock garden with a black or white flag, with the white flag designating that the garden follows her rule,
@@ -20,21 +21,20 @@ Either a garden that his guess says should be marked white but is marked black, 
 
 If the Master cannot create a garden that contradicts the Students rule, he has won the game and guessed the Master's rule.
 
-======
-GARDEN MAKEUP
 
+GARDEN MAKEUP
+======
 A rock garden is represented by a square 4x4 board. Each square must be populated by exactly one of the following:
 
 * A Feature with 3 properties;
-    > A type that may be a Buddha Statue, a Plant, or a Rock
-    > A size that may be Large or Small
-    > A color that may be Black, White, or Grey
-    
+  * A type that may be a Buddha Statue, a Plant, or a Rock
+  * A size that may be Large or Small
+  * A color that may be Black, White, or Grey
 * A Pond with the Water property.
-
 * An Empty Square with the Empty property.
 
 Some example boards in ASCII format are below:
+```
 +-----+-----+-----+-----+
 |Large|     |Small|Small|
 |White|     |Gray |White|
@@ -70,10 +70,10 @@ Some example boards in ASCII format are below:
 |Water|White|Black|     |
 |     |Plant|Budha|     |
 +-----+-----+-----+-----+
+```
 
-======
 RULES
-
+======
 A Property is defined as one of the properties carried by a square in a rock garden. (Buddha, Plant, Stone, Small, Large, White, Black, Grey, Pond, Empty)
 
 The following are rules that may be used by the Master and guessed by the student:
@@ -119,11 +119,13 @@ The following are rules that may be used by the Master and guessed by the studen
 * Rule xor Rule
     > this rule returns true if and only one of the Rules specified returns true and one of the Rules specified returns false (it doesn't matter which)
     
-======
+
 EXAMPLE RULES
+======
 The following is a list of example rules and a board that follows the specified rule.
 
 (exactly 1 Water) and (Black leftof Grey)
+```
 +-----+-----+-----+-----+
 |     |     |     |Large|
 |     |     |     |Gray |
@@ -141,8 +143,9 @@ The following is a list of example rules and a board that follows the specified 
 |White|     |     |     |
 |Plant|     |     |     |
 +-----+-----+-----+-----+
-
+```
 (Black leftof Grey) xor (Water above Grey)
+```
 +-----+-----+-----+-----+
 |     |Large|Small|     |
 |     |Gray |Black|     |
@@ -160,22 +163,22 @@ The following is a list of example rules and a board that follows the specified 
 |     |     |Gray |     |
 |     |     |Budha|     |
 +-----+-----+-----+-----+
+```
 
-======
 PROGRESS AND CHECKLIST
-
+======
 API DONE
-Given a rule, the Master can generate a valid rock garden
-Given a rule, the master can generate an invalid Rock garden
-Given two rules (the Masters rule and the Student's guess), the master can generate a garden that is valid for one, but not the other.
-Gardens generated are unique and non-deterministic (When asked to create gardens, the Master will never create a garden that already exists and the garden will be random)
-Gardens generated are pretty (The master will make sure there aren't too many complicated features and leaves most spaces Empty)
+* Given a rule, the Master can generate a valid rock garden
+* Given a rule, the master can generate an invalid Rock garden
+* Given two rules (the Masters rule and the Student's guess), the master can generate a garden that is valid for one, but not the other.
+* Gardens generated are unique and non-deterministic (When asked to create gardens, the Master will never create a garden that already exists and the garden will be random)
+* Gardens generated are pretty (The master will make sure there aren't too many complicated features and leaves most spaces Empty)
 
 API TODO
-The Master needs to be able to generate a random Rule that roughly matches a designated difficulty
+* The Master needs to be able to generate a random Rule that roughly matches a designated difficulty
 
 GUI AND GAME LOGIC TODO
-Basically everything (Algorithms are easy - first time game coding is hard)
-Port rule generation code from Java to Android.
-Create GUI interface to create and judge rock gardens and scroll through judged gardens.
-Create GUI interface to create Rules so the Student can guess the Master's rule.
+* Basically everything (Algorithms are easy - first time game coding is hard)
+* Port rule generation code from Java to Android.
+* Create GUI interface to create and judge rock gardens and scroll through judged gardens.
+* Create GUI interface to create Rules so the Student can guess the Master's rule.
