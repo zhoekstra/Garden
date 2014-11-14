@@ -12,8 +12,8 @@ public class Program {
         // this is an example restrictive ruleset.
         RuleTree ruleset = new RuleTree(
                 new And(
-                    new Range(16, Attribute.Water, 4),
-                    new Range(16, Attribute.Empty, 12)
+                    new Range(Attribute.Water, 4),
+                    new Range(Attribute.Empty, 12)
                     )
             );
         long starttime = System.nanoTime();
@@ -22,7 +22,7 @@ public class Program {
         // this generally takes about 3 seconds on my home machine
         for(int i = 0; i < 2000; ++i){
             System.out.println(i + " =====================================================");
-            Board board = ruleset.solve();
+            Board board = ruleset.solve();// Every time we call this it should create a new unique board
             if(ruleset.isValidForBoard(board))  board.printBoard();
             else{
                 System.out.println("no more boards found");

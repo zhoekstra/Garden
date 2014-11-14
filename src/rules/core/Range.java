@@ -18,7 +18,6 @@ import rules.common.RuleType;
 import rules.common.Ruleset;
 
 public class Range extends Rule {
-    private final int maxSize;
     private final BitSet validValues;
     private final Attribute attribute;
     
@@ -65,7 +64,7 @@ public class Range extends Rule {
         }
         
         // else go through the list and grab the appropriate number of elements.
-        for(int numElementsToPick = chosenAlready.size() + 1; numElementsToPick <= Properties.GARDENSIZE * Properties.GARDENSIZE; ++numElementsToPick){
+        for(int numElementsToPick = chosenAlready.size() + 1; numElementsToPick <= Properties.NUMBEROFSQUARES; ++numElementsToPick){
             if(validValues.get(numElementsToPick)){
                 int elementsRemainingToPick = numElementsToPick - chosenAlready.size();
                 
@@ -140,63 +139,60 @@ public class Range extends Rule {
         else return true;
     }
     
-    public Range(int boardSize, Attribute attribute, int... validvalues) throws InvalidRuleException{
+    public Range(Attribute attribute, int... validvalues) throws InvalidRuleException{
         if(validvalues.length == 0)
             throw new InvalidRuleException("This rule cannot fit any board");
         
-        this.maxSize = boardSize * boardSize;
-        this.validValues = new BitSet(maxSize+1);
+        this.validValues = new BitSet(Properties.NUMBEROFSQUARES+1);
         this.attribute = attribute;    
         
         for(Integer i : validvalues){
             this.validValues.set(i);
         }
     }
-    private Range(int boardSize, Attribute attribute, BitSet validValues){
-        this.maxSize = boardSize * boardSize;
+    private Range(Attribute attribute, BitSet validValues){
         this.validValues = validValues;
         this.attribute = attribute;
        
     }
     private Range(Range r){
-        this.maxSize = r.maxSize;
         this.attribute = r.attribute;
         this.validValues = (BitSet)r.validValues.clone();
     }
-    public static Range atLeast(int boardSize, Attribute attribute, int atLeast) throws InvalidRuleException{
+    public static Range atLeast(Attribute attribute, int atLeast) throws InvalidRuleException{
         if(atLeast < 0)
             atLeast = 0;
-        else if(atLeast > boardSize*boardSize)
+        else if(atLeast > Properties.NUMBEROFSQUARES)
             throw new InvalidRuleException("This rule cannot fit any board");
         
-        BitSet validValues = new BitSet((boardSize*boardSize)+1);
-        for(int i = atLeast; i <= boardSize*boardSize; ++i)
+        BitSet validValues = new BitSet(Properties.NUMBEROFSQUARES+1);
+        for(int i = atLeast; i <= Properties.NUMBEROFSQUARES; ++i)
             validValues.set(i);
-        return new Range(boardSize, attribute, validValues);
+        return new Range(attribute, validValues);
     }
-    public static Range atMost(int boardSize, Attribute attribute, int atMost) throws InvalidRuleException{
-        if(atMost > boardSize*boardSize)
-            atMost = boardSize*boardSize;
+    public static Range atMost(Attribute attribute, int atMost) throws InvalidRuleException{
+        if(atMost > Properties.NUMBEROFSQUARES)
+            atMost = Properties.NUMBEROFSQUARES;
         if(atMost < 0)
             throw new InvalidRuleException("This rule cannot fit any board");
         
-        BitSet validValues = new BitSet((boardSize*boardSize)+1);
+        BitSet validValues = new BitSet(Properties.NUMBEROFSQUARES+1);
         for(int i = atMost; i >= 0; --i)
             validValues.set(i);
-        return new Range(boardSize, attribute, validValues);
+        return new Range( attribute, validValues);
     }
-    public static Range exactly(int boardSize, Attribute attribute, int exactly) throws InvalidRuleException{
-        if(exactly > boardSize*boardSize || exactly < 0)
+    public static Range exactly(Attribute attribute, int exactly) throws InvalidRuleException{
+        if(exactly > Properties.NUMBEROFSQUARES || exactly < 0)
             throw new InvalidRuleException("This rule cannot fit any board");
         
-        BitSet validValues = new BitSet((boardSize*boardSize)+1);
+        BitSet validValues = new BitSet(Properties.NUMBEROFSQUARES+1);
         validValues.set(exactly);
         
-        return new Range(boardSize, attribute, validValues);
+        return new Range(attribute, validValues);
     }
     
     public boolean canBeAtLeast(int amount){
-        for(int i = amount; i <= maxSize; ++i){
+        for(int i = amount; i <= Properties.NUMBEROFSQUARES; ++i){
             if(validValues.get(i)) return true;
         }
         return false;
@@ -205,7 +201,7 @@ public class Range extends Rule {
     @Override
     public Rule negative() {
         Range toreturn = new Range(this);
-        for(int i = 0; i <= toreturn.maxSize; ++i)
+        for(int i = 0; i <= Properties.NUMBEROFSQUARES; ++i)
             toreturn.validValues.flip(i);
         return toreturn;
     }
@@ -216,7 +212,7 @@ public class Range extends Rule {
             if(r2.getAttribute() == attribute){
                 BitSet toreturn = (BitSet)this.validValues.clone();
                 toreturn.and(r2.getValidValues());
-                return new Range(maxSize, attribute, toreturn);
+                return new Range(attribute, toreturn);
             }
         }
         return null;
@@ -224,7 +220,7 @@ public class Range extends Rule {
     
     public void updateMinumumAmountRequired(EnumMap<Attribute,Integer> amountrequired) {
         int rangeamountrequired = 0;
-        for(; rangeamountrequired < maxSize; rangeamountrequired++)
+        for(; rangeamountrequired < Properties.NUMBEROFSQUARES; rangeamountrequired++)
             if(validValues.get(rangeamountrequired)) break;
         
         int curramountreq = amountrequired.containsKey(attribute) ? amountrequired.get(attribute) : 0;
@@ -233,7 +229,7 @@ public class Range extends Rule {
     
     public String toString(){
         String toreturn = "[ "+attribute+" range ";
-        for(int i = 0; i < maxSize; ++i)
+        for(int i = 0; i < Properties.NUMBEROFSQUARES; ++i)
             if(validValues.get(i)) toreturn+=i+" ";
         return toreturn+"]";
     }
