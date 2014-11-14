@@ -15,8 +15,33 @@ public class Or extends Rule {
     public List<List<Rule>> walkAndCreateRulesets() {
         List<List<Rule>> toreturn =new LinkedList<List<Rule>>();
         
-        toreturn.addAll(left.walkAndCreateRulesets());
-        toreturn.addAll(right.walkAndCreateRulesets());
+        List<List<Rule>> leftrulesets = left.walkAndCreateRulesets();
+        List<List<Rule>> rightrulesets = right.walkAndCreateRulesets();
+        
+        // add left && right
+        for(List<Rule> leftruleset : leftrulesets){
+            for(List<Rule> rightruleset : rightrulesets){
+                LinkedList<Rule> newList = new LinkedList<Rule>(leftruleset);
+                newList.addAll(rightruleset);
+                toreturn.add(newList);
+            }
+        }
+        // add left && !right
+        for(List<Rule> leftruleset : leftrulesets){
+            for(List<Rule> rightruleset : right.negative().walkAndCreateRulesets()){
+                LinkedList<Rule> newList = new LinkedList<Rule>(leftruleset);
+                newList.addAll(rightruleset);
+                toreturn.add(newList);
+            }
+        }
+        // add !left && right
+        for(List<Rule> leftruleset : left.negative().walkAndCreateRulesets()){
+            for(List<Rule> rightruleset : rightrulesets){
+                LinkedList<Rule> newList = new LinkedList<Rule>(leftruleset);
+                newList.addAll(rightruleset);
+                toreturn.add(newList);
+            }
+        }
         
         return toreturn;
     }

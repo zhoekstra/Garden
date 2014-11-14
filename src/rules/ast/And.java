@@ -14,6 +14,7 @@ public class And extends Rule {
     
     public List<List<Rule>> walkAndCreateRulesets() {
         List<List<Rule>> toreturn =new LinkedList<List<Rule>>();
+        // add left && right
         for(List<Rule> leftruleset : left.walkAndCreateRulesets()){
             for(List<Rule> rightruleset : right.walkAndCreateRulesets()){
                 LinkedList<Rule> newList = new LinkedList<Rule>(leftruleset);
