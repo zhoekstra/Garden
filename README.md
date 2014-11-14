@@ -4,7 +4,7 @@ Karensansui
 Karensansui is an inductive logic game for one human player, known as the "Student" and an AI known as the "Master".
 
 The following is an overview of the rules of the game. For anyone interested in understanding the algorithms behind the game, read the quick synopsis below
-and then open the file "AlgorithmExplanations.txt"
+and then open the file "AlgorithmExplanations.md"
 
 OVERVIEW
 ======
