@@ -168,6 +168,7 @@ The following is a list of example rules and a board that follows the specified 
 PROGRESS AND CHECKLIST
 ======
 API DONE
+* Given a rule and a board, the Master can determine if the board follows or does not follow the rule.
 * Given a rule, the Master can generate a valid rock garden
 * Given a rule, the master can generate an invalid Rock garden
 * Given two rules (the Masters rule and the Student's guess), the master can generate a garden that is valid for one, but not the other.
