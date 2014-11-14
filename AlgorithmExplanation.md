@@ -114,3 +114,10 @@ So in order to solve a Rule AST (R), we do the following:
 * If no Rulesets are left after discounting invalid rulesets, no valid board exists for this Rule.
 * If at least 1 exists, for each ruleset, attempt to find a valid board using the Garden Solver.
 * Return the first valid board you can find.
+
+Making Pretty Boards
+===
+
+In order to create a random board instead of a deterministic board, all we have to do is make sure that all of our positive rules select Choices in the order they appear in our circularly linked list, and then shuffle that list before we do our search. However, if we just randomly shuffle our space, we end up with a situation where a Feature (Size, Type, or Color) is chosen three times as much as an Empty space. This results in a bunch of very ugly, cluttered boards where there are pieces everywhere. A human couldn't easily find a pattern in all that mess. On the other hand, we don't want to choose only the choices we need to cover the rule and choose Empty for every other space - that would make it too easy to figure out the rule.
+
+The solution I ended up using was, instead of doing a completely random shuffle, to concentrate the Empty Choices towards the front of the list where they would be more likely to be picked first by any Rules that choose to do so. So when I shuffle the order of the Choices, I make sure the 16 Empty Choices are shuffled into the front 15% of the list. So of the first 24 Choices, 16 are Empty, and 8 will lead to a full on Feature being there. This means that after I choose my minumum number of Features needed, on average a remaining third of the spaces that still need to be assigned will be "dummy" Features, with the other squares assigned an Empty Choice.
