@@ -15,6 +15,11 @@ import properties.Properties;
 import rules.other.BoardIsUnique;
 import rules.other.BoardIsValid;
 
+/**
+ * A RuleSet represents a part of a flattened RuleTree. It consists of a set of Rules that must ALL be true.
+ * @author hoekstrz
+ *
+ */
 public class Ruleset {
     private final LinkedList<Rule> rules = new LinkedList<Rule>();
 
@@ -82,7 +87,14 @@ public class Ruleset {
         else
             return true;
     }
-
+    /**
+     * Generate a valid board for this RuleSet
+     * 
+     * This will ask each Rule to cover itself and then call the coverRule method on the next Rule in line, so that we can backtrack if something goes wrong.
+     * If all Rules can cover themselves, great, we have a valid solution!
+     * @param gs the GardenSolver to solve this Ruleset with.
+     * @return a valid Board if one was found, or NoSolutionFound if no solution was found.
+     */
     public Board solveRuleset(GardenSolver gs){
         for(Rule rule : rules){
             rule.applyRestrictions(gs);
@@ -90,7 +102,11 @@ public class Ruleset {
         if(!recurse(gs)) return Board.NoSolutionFound;
         else return new Board(gs.getAllChosenProperties());
     }
-
+    /**
+     * recurse on the current solver and move to the next rule. Only to be used inside a coverRule() function.
+     * @param gs
+     * @return
+     */
     public boolean recurse(GardenSolver gs) {
         if(rules.size() == 0) return true;
         
@@ -99,5 +115,4 @@ public class Ruleset {
         rules.addFirst(current);
         return succeeded;
     }
-
 }

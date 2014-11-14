@@ -5,7 +5,6 @@ import garden.common.Board;
 import rules.ast.And;
 import rules.common.InvalidRuleException;
 import rules.common.RuleTree;
-import rules.core.NotLeftOf;
 import rules.core.Range;
 
 public class Program {

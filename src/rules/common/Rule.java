@@ -9,6 +9,12 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The abstract class the represents a Rule. All of the rules in rules.core and rules.ast need to extend
+ * this class and implement their own custom versions of each of these functions.
+ * @author hoekstrz
+ *
+ */
 public abstract class Rule {
     /**
      * Optional method Called before solving for each rule. This gives the
@@ -30,12 +36,12 @@ public abstract class Rule {
      * @param gs
      * @param rules
      */
-    public boolean coverRule(GardenSolver gs, Ruleset myruleset) {return myruleset.recurse(gs);}
+    public boolean coverRule(GardenSolver gs, Ruleset myruleset) { return myruleset.recurse(gs); }
     
     /**
      * 
-     * @param generatedBoards
-     * @return
+     * @param generatedBoards A pointer to a list of boards that have generated. As Boards are created from any Rule, they should be added to this List  
+     * @return return a list of rulesets that represent this rule. If this List is empty, the Rule is technically impossible.
      */
     public final List<Ruleset> walkRulesets(List<Board> generatedBoards){
         List<Ruleset> toreturn = new LinkedList<Ruleset>();
@@ -56,6 +62,11 @@ public abstract class Rule {
         return Arrays.asList( Arrays.asList(this));
     }
     
+    /**
+     * Check to see if the board given follows this Rule.
+     * @param board the board to check against
+     * @return true if this board follows this rule, false otherwise.
+     */
     public abstract boolean followsRule(Board board);
 
     /**
@@ -79,6 +90,11 @@ public abstract class Rule {
         return null;
     }
     
+    /**
+     * update the EnumMap passed to you to make sure that the minimum number of each Attribute accurately reflects how this Rule could be covered.
+     * For example, if to cover yourself you need at least 4 Small Features, then you should check to make sure that amountrequired[Small] is at least 4, and set it to 4 if it isn't.
+     * @param amountrequired
+     */
     public void updateMinumumAmountRequired(EnumMap<Attribute,Integer> amountrequired) {}
     
     public abstract RuleType type();
